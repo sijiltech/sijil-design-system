@@ -1,0 +1,271 @@
+/*
+ * Sijil design family — slot styles.
+ *
+ * Presentation rules that target the stable `data-slot` attributes emitted by
+ * the components (card, dialog, popover, inputs, tabs, calendar days...).
+ * Every rule is scoped to `:root[data-ds-family="sijil"]` through a
+ * zero-specificity `:where()`, so a second family can ship different rules
+ * without colliding with these.
+ *
+ * NOTE: the unlayered section intentionally stays outside any `@layer`: it
+ * preserves the cascade precedence the original application stylesheet had
+ * relative to Tailwind utilities (including their `!important` variants).
+ */
+
+@layer base {
+  :where(:root[data-ds-family="sijil"]) * {
+    @apply border-border outline-ring/50;
+  }
+
+  :where(:root[data-ds-family="sijil"]) input,
+:where(:root[data-ds-family="sijil"]) select,
+:where(:root[data-ds-family="sijil"]) button,
+:where(:root[data-ds-family="sijil"]) textarea {
+    outline: none !important;
+  }
+
+  /* Minimalist Card styling slots */
+  :where(:root[data-ds-family="sijil"]) [data-slot="card"] {
+    border-radius: var(--radius-2xl) !important;
+    box-shadow: var(--shadow-sm) !important;
+    border-color: transparent;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  }
+
+  :where(:root[data-ds-family="sijil"]) [data-slot="card"]:hover {
+    border-color: transparent;
+    box-shadow: var(--shadow-md) !important;
+  }
+
+  /* Minimalist Dialog content slot */
+  :where(:root[data-ds-family="sijil"]) [data-slot="dialog-content"],
+:where(:root[data-ds-family="sijil"]) [data-slot="alert-dialog-content"] {
+    border-radius: var(--radius-2xl) !important;
+    box-shadow: var(--shadow-xl) !important;
+    border-color: var(--border) !important;
+  }
+
+  /* Minimalist Popover and Dropdown slots */
+  :where(:root[data-ds-family="sijil"]) [data-slot="popover-content"],
+:where(:root[data-ds-family="sijil"]) [data-slot="dropdown-menu-content"],
+:where(:root[data-ds-family="sijil"]) [data-slot="dropdown-menu-sub-content"] {
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg) !important;
+    border-color: var(--border) !important;
+  }
+
+  /* Backdrop blur for Dialog & Sheet overlays - soft & minimal */
+  :where(:root[data-ds-family="sijil"]) [data-slot="dialog-overlay"],
+:where(:root[data-ds-family="sijil"]) [data-slot="alert-dialog-overlay"],
+:where(:root[data-ds-family="sijil"]) [data-slot="sheet-overlay"] {
+    backdrop-filter: blur(4px) !important;
+    background-color: rgba(9, 9, 11, 0.4) !important;
+  }
+
+  /* Minimalist Scrollbar Styling */
+  :where(:root[data-ds-family="sijil"])::-webkit-scrollbar,
+:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  :where(:root[data-ds-family="sijil"])::-webkit-scrollbar-track,
+:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-track {
+    background: transparent;
+    cursor: pointer;
+  }
+
+  :where(:root[data-ds-family="sijil"])::-webkit-scrollbar-thumb,
+:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-thumb {
+    background: var(--input);
+    border-radius: 100px;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    transition: background 0.2s ease;
+    cursor: pointer;
+  }
+
+  :where(:root[data-ds-family="sijil"])::-webkit-scrollbar-thumb:hover,
+:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
+  }
+
+:where(:root[data-ds-family="sijil"]).dark body {
+  background-image: linear-gradient(180deg, #000000, #000000);
+}
+
+:where(:root[data-ds-family="sijil"]).dark-blue body {
+  background-image: linear-gradient(180deg, var(--background), #0a111e);
+}
+}
+
+@layer utilities {
+  .scrollbar-premium {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  /* Expandable Scrollbar Utility - Fixed track width to prevent layout shift */
+  .scrollbar-expandable::-webkit-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .rdp-today {
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+
+  /* Reserve space to prevent jumpy layout on content change */
+  .scrollbar-stable {
+    scrollbar-gutter: stable;
+  }
+}
+
+:where(:root[data-ds-family="sijil"]) [data-sidebar="rail"] {
+  display: none;
+}
+
+:where(:root[data-ds-family="sijil"]) [data-slot="sidebar-gap"],
+:where(:root[data-ds-family="sijil"]) [data-slot="sidebar"] {
+  max-width: var(--sidebar-width) !important;
+}
+
+/* Subtle shadow for inputs, selects, and menu triggers to define their shape */
+:where(:root[data-ds-family="sijil"]) input[data-slot="input"]:not(.border-none),
+:where(:root[data-ds-family="sijil"]) textarea[data-slot="textarea"],
+:where(:root[data-ds-family="sijil"]) button[data-slot="select-trigger"],
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="listbox"],
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="dialog"],
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="menu"]:not([data-sidebar="menu-button"]),
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="true"]:not([data-sidebar="menu-button"]),
+:where(:root[data-ds-family="sijil"]) select,
+:where(:root[data-ds-family="sijil"]) input.border-input,
+:where(:root[data-ds-family="sijil"]) textarea.border-input,
+:where(:root[data-ds-family="sijil"]) button.border-input,
+:where(:root[data-ds-family="sijil"]) div.border:not([data-slot]):has(input[data-slot="input"]),
+:where(:root[data-ds-family="sijil"]) .border-input {
+  box-shadow: var(--shadow-sm) !important;
+}
+
+/* ─── Unified Minimalist Hover Styling overrides ─── */
+
+/* Transition declarations */
+:where(:root[data-ds-family="sijil"]) button[data-sidebar="menu-button"] {
+  box-shadow: none !important;
+}
+
+:where(:root[data-ds-family="sijil"]) input[data-slot="input"]:not(.border-none),
+:where(:root[data-ds-family="sijil"]) textarea[data-slot="textarea"],
+:where(:root[data-ds-family="sijil"]) button[data-slot="select-trigger"],
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="listbox"],
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="dialog"],
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="menu"]:not([data-sidebar="menu-button"]),
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="true"]:not([data-sidebar="menu-button"]),
+:where(:root[data-ds-family="sijil"]) select,
+:where(:root[data-ds-family="sijil"]) input.border-input,
+:where(:root[data-ds-family="sijil"]) textarea.border-input,
+:where(:root[data-ds-family="sijil"]) button.border,
+:where(:root[data-ds-family="sijil"]) button.border-input,
+:where(:root[data-ds-family="sijil"]) button.border-border,
+:where(:root[data-ds-family="sijil"]) button.hover\:bg-muted,
+:where(:root[data-ds-family="sijil"]) div.border:not([data-slot]):has(input[data-slot="input"]),
+:where(:root[data-ds-family="sijil"]) button[data-slot="tabs-trigger"]:not([data-state="active"]):not(:disabled),
+:where(:root[data-ds-family="sijil"]) button[role="tab"]:not([data-state="active"]):not(:disabled),
+:where(:root[data-ds-family="sijil"]) button[data-day]:not([data-selected-single="true"]):not([data-range-start="true"]):not([data-range-end="true"]):not([data-range-middle="true"]):not(:disabled),
+:where(:root[data-ds-family="sijil"]) .rdp-day_button:not([data-selected-single="true"]):not([data-range-start="true"]):not([data-range-end="true"]):not([data-range-middle="true"]):not(:disabled),
+:where(:root[data-ds-family="sijil"]) button.rdp-button_next:not(:disabled),
+:where(:root[data-ds-family="sijil"]) button.rdp-button_previous:not(:disabled),
+:where(:root[data-ds-family="sijil"]) .rdp-dropdown_root,
+:where(:root[data-ds-family="sijil"]) span.cursor-pointer.hover\:bg-muted {
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.15s ease-out, transform 0.15s ease-out !important;
+}
+
+/* Hover style overrides - gentle neutral borders/bgs */
+:where(:root[data-ds-family="sijil"]) input[data-slot="input"]:not(.border-none):not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) textarea[data-slot="textarea"]:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[data-slot="select-trigger"]:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="listbox"]:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="dialog"]:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="menu"]:not([data-sidebar="menu-button"]):not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[aria-haspopup="true"]:not([data-sidebar="menu-button"]):not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) select:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) input.border-input:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) textarea.border-input:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[data-slot="button"].border:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[data-slot="button"]:not(.bg-primary):not(.bg-destructive):not(.bg-secondary):not(.text-primary):not([data-selected-single="true"]):not([data-range-start="true"]):not([data-range-end="true"]):not([data-range-middle="true"]):not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button.border:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button.border-input:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button.border-border:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button.hover\:bg-muted:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) div.border:not([data-slot]):has(input[data-slot="input"]:not(:disabled)):hover {
+  border-color: var(--hover-border) !important;
+  background-color: var(--hover-bg) !important;
+}
+
+:where(:root[data-ds-family="sijil"]) button[data-slot="tabs-trigger"]:not([data-state="active"]):not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button[role="tab"]:not([data-state="active"]):not(:disabled):hover {
+  background-color: var(--hover-bg) !important;
+  border-color: var(--hover-border) !important;
+}
+
+:where(:root[data-ds-family="sijil"]) button[data-day]:not([data-selected-single="true"]):not([data-range-start="true"]):not([data-range-end="true"]):not([data-range-middle="true"]):not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) .rdp-day_button:not([data-selected-single="true"]):not([data-range-start="true"]):not([data-range-end="true"]):not([data-range-middle="true"]):not(:disabled):hover {
+  background-color: var(--secondary-hover) !important;
+  color: var(--secondary-foreground) !important;
+}
+
+:where(:root[data-ds-family="sijil"]) button.rdp-button_next:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) button.rdp-button_previous:not(:disabled):hover,
+:where(:root[data-ds-family="sijil"]) .rdp-dropdown_root:hover,
+:where(:root[data-ds-family="sijil"]) span.cursor-pointer.hover\:bg-muted:hover {
+  background-color: var(--hover-bg) !important;
+  border-color: var(--hover-border) !important;
+}
+
+/* ─── Premium Button Hover Shimmer Effects ─── */
+:where(:root[data-ds-family="sijil"]) .btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+:where(:root[data-ds-family="sijil"]) .btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.75),
+      transparent);
+  transform: skewX(-20deg);
+  pointer-events: none;
+}
+
+:where(:root[data-ds-family="sijil"]) .dark .btn-shimmer::after {
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(82, 82, 82, 0.75),
+      transparent);
+}
+
+:where(:root[data-ds-family="sijil"]) .dark-blue .btn-shimmer::after {
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.25),
+      transparent);
+}
+
+:where(:root[data-ds-family="sijil"]) .btn-shimmer:hover::after {
+  left: 150%;
+  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tooltip Popover Style Arrow Customization */
+:where(:root[data-ds-family="sijil"]) [data-slot="tooltip-content"].bg-popover svg,
+:where(:root[data-ds-family="sijil"]) [data-slot="tooltip-content"].bg-popover [data-radix-tooltip-arrow] {
+  background-color: var(--popover) !important;
+  fill: var(--popover) !important;
+}
