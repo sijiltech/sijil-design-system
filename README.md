@@ -20,6 +20,12 @@ design-system/
 └── package.json         # Workspace root definition (Bun workspaces)
 ```
 
+## Documentation
+
+- [**Comprehensive Usage Guide (`docs/USAGE.md`)**](docs/USAGE.md): Installation, Next.js & Vite setup, theme tokens, and practical code snippets for all 37 components and subpaths.
+- [**Architecture Guide (`docs/ARCHITECTURE.md`)**](docs/ARCHITECTURE.md): Design principles, dependency boundaries, token contract, and verification gates.
+- [**Package README (`packages/ui/README.md`)**](packages/ui/README.md): Technical package metadata, exports, and build configuration.
+
 ## Available Scripts
 
 From the `design-system/` root directory:
