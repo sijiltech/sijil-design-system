@@ -32,6 +32,41 @@ const getSystemTheme = (): ResolvedTheme => {
 const resolveTheme = (theme: Theme): ResolvedTheme =>
   theme === "system" ? getSystemTheme() : theme;
 
+const TRANSITION_DISABLE_ID = "sijil-theme-transition-disable";
+
+/**
+ * Temporarily disables all CSS transitions during theme changes to prevent
+ * lagging components (fade/transition delay) while the page background snaps.
+ */
+const disableTransitions = () => {
+  if (typeof document === "undefined") return () => {};
+
+  let css = document.getElementById(TRANSITION_DISABLE_ID) as HTMLStyleElement | null;
+  if (!css) {
+    css = document.createElement("style");
+    css.id = TRANSITION_DISABLE_ID;
+    css.textContent =
+      "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important;animation-duration:0s!important;}";
+    document.head.appendChild(css);
+  }
+
+  return () => {
+    // Force a reflow so the browser evaluates new theme variables immediately without transitions
+    if (typeof window !== "undefined") {
+      (() => window.getComputedStyle(document.body))();
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const el = document.getElementById(TRANSITION_DISABLE_ID);
+          if (el) {
+            el.remove();
+          }
+        });
+      });
+    }
+  };
+};
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
@@ -59,10 +94,14 @@ export function ThemeProvider({
       const root = window.document.documentElement;
       const resolved = resolveTheme(nextTheme);
 
+      const enableTransitions = disableTransitions();
+
       root.classList.remove("light", "dark", "dark-blue");
       root.classList.add(resolved);
       root.setAttribute("data-theme", resolved);
       root.style.colorScheme = resolved === "light" ? "light" : "dark";
+
+      enableTransitions();
 
       setResolvedTheme(resolved);
     },
