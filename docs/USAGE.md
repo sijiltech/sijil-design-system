@@ -341,6 +341,47 @@ export function ButtonDemo() {
 }
 ```
 
+#### ActionButtons (Approve & Refuse Pairs):
+
+```tsx
+import { ActionButtons, ApproveButton, RefuseButton } from "@sijil/ui";
+
+export function RequestActionGroup({ onApprove, onRefuse }: { onApprove: () => void; onRefuse: () => void }) {
+  return (
+    <ActionButtons
+      onApprove={onApprove}
+      onRefuse={onRefuse}
+      approveLabel="موافقة"
+      refuseLabel="رفض"
+      size="sm"
+    />
+  );
+}
+```
+
+#### Toggle & ToggleGroup:
+
+```tsx
+import { ToggleGroup, ToggleGroupItem } from "@sijil/ui";
+import { Bold, Italic, Underline } from "lucide-react";
+
+export function FormattingToolbar() {
+  return (
+    <ToggleGroup type="multiple">
+      <ToggleGroupItem value="bold" aria-label="Toggle bold">
+        <Bold className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="italic" aria-label="Toggle italic">
+        <Italic className="h-4 w-4" />
+      </ToggleGroupItem>
+      <ToggleGroupItem value="underline" aria-label="Toggle underline">
+        <Underline className="h-4 w-4" />
+      </ToggleGroupItem>
+    </ToggleGroup>
+  );
+}
+```
+
 ---
 
 ### 5.2 Form Controls & Field Structure
@@ -412,6 +453,33 @@ export function UserForm() {
           onCheckedChange={setNotifications}
         />
       </div>
+
+      {/* Multiline Textarea */}
+      <Field>
+        <FieldLabel htmlFor="notes">ملاحظات إضافية</FieldLabel>
+        <Textarea id="notes" placeholder="أدخل أية ملاحظات تخص الطلب..." />
+      </Field>
+
+      {/* Accessible Radio Group */}
+      <Field>
+        <FieldLabel>نوع العقد</FieldLabel>
+        <RadioGroup defaultValue="full-time" className="space-y-2 mt-2">
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="full-time" id="r-full" />
+            <Label htmlFor="r-full" className="cursor-pointer">دوام كامل</Label>
+          </div>
+          <div className="flex items-center gap-2">
+            <RadioGroupItem value="part-time" id="r-part" />
+            <Label htmlFor="r-part" className="cursor-pointer">دوام جزئي</Label>
+          </div>
+        </RadioGroup>
+      </Field>
+
+      {/* Slider */}
+      <Field>
+        <FieldLabel>نسبة الإنجاز المتوقعة</FieldLabel>
+        <Slider defaultValue={[50]} max={100} step={5} />
+      </Field>
     </form>
   );
 }
@@ -642,6 +710,68 @@ export function PolicyTabs() {
 }
 ```
 
+#### Pagination:
+
+```tsx
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+  PaginationEllipsis,
+} from "@sijil/ui";
+
+export function TablePagination({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (p: number) => void }) {
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => { e.preventDefault(); if (currentPage > 1) onPageChange(currentPage - 1); }}
+          />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#" isActive>{currentPage}</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationEllipsis />
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            onClick={(e) => { e.preventDefault(); if (currentPage < totalPages) onPageChange(currentPage + 1); }}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+}
+```
+
+#### PeriodNavigator (Cycle through Time Periods):
+
+```tsx
+import { PeriodNavigator } from "@sijil/ui";
+import { Calendar } from "lucide-react";
+import { useState } from "react";
+
+export function AttendancePeriodBar() {
+  const [period, setPeriod] = useState("نوفمبر 2026");
+
+  return (
+    <PeriodNavigator
+      periodLabel={period}
+      icon={<Calendar className="w-4 h-4 text-muted-foreground" />}
+      onPrev={() => console.log("Navigate prev")}
+      onNext={() => console.log("Navigate next")}
+    />
+  );
+}
+```
+
 ---
 
 ### 5.6 Data Tables (Standard & FlexTable)
@@ -685,6 +815,59 @@ export function EmployeeTable({ rows }: { rows: Array<{ id: string; name: string
             </TableRow>
           ))}
         </TableBody>
+      </Table>
+    </div>
+  );
+}
+```
+
+#### Sortable Table with Column Visibility Filter:
+
+```tsx
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+  SortableTableHead,
+  TableColumnFilter,
+} from "@sijil/ui";
+
+export function SortableEmployeeTable({ rows }) {
+  const [sortKey, setSortKey] = React.useState<string | null>("date-asc");
+  const [columns, setColumns] = React.useState([
+    { id: "name", label: "اسم الموظف", isVisible: true },
+    { id: "date", label: "التاريخ", isVisible: true },
+  ]);
+
+  return (
+    <div>
+      <div className="flex justify-end mb-2">
+        <TableColumnFilter
+          columns={columns.map((c) => ({
+            id: c.id,
+            label: c.label,
+            isVisible: c.isVisible,
+            toggleVisibility: () =>
+              setColumns((prev) =>
+                prev.map((col) => (col.id === c.id ? { ...col, isVisible: !col.isVisible } : col))
+              ),
+          }))}
+        />
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <SortableTableHead
+              title="اسم الموظف"
+              currentSortKey={sortKey}
+              sortUpKey="name-asc"
+              sortDownKey="name-desc"
+              onSort={setSortKey}
+            />
+          </TableRow>
+        </TableHeader>
       </Table>
     </div>
   );
@@ -790,14 +973,71 @@ import { Badge } from "@sijil/ui";
 
 export function StatusBadges() {
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       <Badge variant="default">أساسي</Badge>
       <Badge variant="secondary">ثانوي</Badge>
       <Badge variant="success">مقبول</Badge>
-      <Badge variant="danger">مرفوض</Badge>
+      <Badge variant="destructive">مرفوض</Badge>
       <Badge variant="warning">قيد المراجعة</Badge>
+      <Badge variant="info">معلومة</Badge>
+      <Badge variant="subtle-success">مكتمل</Badge>
+      <Badge variant="subtle-warning">معلق</Badge>
       <Badge variant="outline">مسودة</Badge>
     </div>
+  );
+}
+```
+
+#### Progress (Accessible Progress Bar):
+
+```tsx
+import { Progress } from "@sijil/ui";
+
+export function QuotaProgress({ used, total }: { used: number; total: number }) {
+  const percentage = (used / total) * 100;
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between text-xs text-muted-foreground">
+        <span>رصيد الإجازات المستهلك</span>
+        <span>{used} / {total} يوم</span>
+      </div>
+      <Progress value={percentage} variant={percentage > 80 ? "warning" : "default"} />
+    </div>
+  );
+}
+```
+
+#### Spinner (Accessible Loading Indicator):
+
+```tsx
+import { Spinner } from "@sijil/ui";
+
+export function LoadingCard() {
+  return (
+    <div className="flex items-center justify-center p-8 gap-3 text-muted-foreground">
+      <Spinner size="default" />
+      <span>جاري تحميل السجلات...</span>
+    </div>
+  );
+}
+```
+
+#### ScrollArea (Themed Custom Scrollbar):
+
+```tsx
+import { ScrollArea } from "@sijil/ui";
+
+export function ActivityList({ items }: { items: string[] }) {
+  return (
+    <ScrollArea className="h-72 w-full rounded-md border p-4">
+      <div className="space-y-2">
+        {items.map((item, i) => (
+          <div key={i} className="text-sm border-b py-2 last:border-0">
+            {item}
+          </div>
+        ))}
+      </div>
+    </ScrollArea>
   );
 }
 ```

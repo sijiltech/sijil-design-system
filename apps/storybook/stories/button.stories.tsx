@@ -5,6 +5,12 @@ import { Button } from "@sijil/ui";
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
+  args: {
+    variant: "default",
+    size: "default",
+    disabled: false,
+    noShimmer: false,
+  },
   argTypes: {
     variant: {
       control: "select",
@@ -13,6 +19,10 @@ const meta: Meta<typeof Button> = {
     size: {
       control: "select",
       options: ["default", "xs", "sm", "lg", "icon", "icon-sm", "icon-lg"],
+    },
+    type: {
+      control: "select",
+      options: ["", "success", "warning", "destructive", "submit"],
     },
     disabled: { control: "boolean" },
     noShimmer: { control: "boolean" },
@@ -25,42 +35,40 @@ type Story = StoryObj<typeof Button>;
 export const Default: Story = {
   args: {
     children: "Button",
-    variant: "default",
-    size: "default",
   },
 };
 
 export const Variants: Story = {
-  render: () => (
+  render: (args) => (
     <div className="flex flex-wrap items-center gap-4">
-      <Button variant="default">Default</Button>
-      <Button variant="secondary">Secondary</Button>
-      <Button variant="outline">Outline</Button>
-      <Button variant="destructive">Destructive</Button>
-      <Button variant="ghost">Ghost</Button>
-      <Button variant="link">Link</Button>
+      <Button {...args} variant="default">Default</Button>
+      <Button {...args} variant="secondary">Secondary</Button>
+      <Button {...args} variant="outline">Outline</Button>
+      <Button {...args} variant="destructive">Destructive</Button>
+      <Button {...args} variant="ghost">Ghost</Button>
+      <Button {...args} variant="link">Link</Button>
     </div>
   ),
 };
 
 export const SemanticActions: Story = {
-  render: () => (
+  render: (args) => (
     <div className="flex flex-wrap items-center gap-4">
-      <Button type="success" variant="default">Approve Request</Button>
-      <Button type="warning" variant="default">Pending Notice</Button>
-      <Button type="submit" variant="default">Submit Form</Button>
-      <Button variant="destructive">Refuse Request</Button>
+      <Button {...args} type="success">Approve Request</Button>
+      <Button {...args} type="warning">Pending Notice</Button>
+      <Button {...args} type="submit">Submit Form</Button>
+      <Button {...args} type="destructive">Refuse Request</Button>
     </div>
   ),
 };
 
 export const Sizes: Story = {
-  render: () => (
+  render: (args) => (
     <div className="flex flex-wrap items-center gap-4">
-      <Button size="xs">Extra Small</Button>
-      <Button size="sm">Small</Button>
-      <Button size="default">Default</Button>
-      <Button size="lg">Large</Button>
+      <Button {...args} size="xs">Extra Small</Button>
+      <Button {...args} size="sm">Small</Button>
+      <Button {...args} size="default">Default</Button>
+      <Button {...args} size="lg">Large</Button>
     </div>
   ),
 };

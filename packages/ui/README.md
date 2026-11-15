@@ -174,8 +174,33 @@ All components bind strictly to CSS custom properties defined in the semantic co
 To preserve small bundle sizes and avoid forcing consumers to install unneeded peer dependencies, `@sijil/ui` provides explicit modular subpaths:
 
 ```tsx
-// 1. Core Primitives (minimal peers: React, Radix UI, CVA, Tailwind)
-import { Button, Input, Dialog, Select, Tabs, Card, Sheet, Sidebar } from "@sijil/ui";
+// 1. Core Primitives & Extended Components (minimal peers: React, Radix UI, CVA, Tailwind)
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  CollapsibleCard,
+  Table,
+  SortableTableHead,
+  SortableFlexTableHead,
+  TableColumnFilter,
+  FiltersContainer,
+  MultiSelectDropdown,
+  AppHeader,
+  NavMain,
+  NavUser,
+  TeamSwitcher,
+  SidebarBrand,
+  LanguageSwitcher,
+  ModeToggle,
+  ThemeToggle,
+  ThemeProvider,
+  useTheme,
+  MobileBottomNav,
+  MobileSettingsRow,
+  MobileSettingsSection,
+  PullToRefreshIndicator,
+} from "@sijil/ui";
 
 // 2. Calendar (peers: react-day-picker, date-fns)
 import { Calendar, CalendarDayButton, CalendarLocaleProvider } from "@sijil/ui/calendar";
@@ -184,7 +209,15 @@ import { Calendar, CalendarDayButton, CalendarLocaleProvider } from "@sijil/ui/c
 import { DateRangePicker } from "@sijil/ui/date-picker";
 
 // 4. Charting (peer: recharts)
-import { ChartContainer, ChartTooltip, ChartLegend } from "@sijil/ui/chart";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartDefs,
+  ChartLegends,
+  ChartCard,
+} from "@sijil/ui/chart";
 
 // 5. Command Palette (peer: cmdk)
 import { Command, CommandDialog, CommandInput, CommandList } from "@sijil/ui/command";

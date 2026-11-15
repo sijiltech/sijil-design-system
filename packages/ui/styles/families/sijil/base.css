@@ -18,9 +18,9 @@
   }
 
   :where(:root[data-ds-family="sijil"]) input,
-:where(:root[data-ds-family="sijil"]) select,
-:where(:root[data-ds-family="sijil"]) button,
-:where(:root[data-ds-family="sijil"]) textarea {
+  :where(:root[data-ds-family="sijil"]) select,
+  :where(:root[data-ds-family="sijil"]) button,
+  :where(:root[data-ds-family="sijil"]) textarea {
     outline: none !important;
   }
 
@@ -28,18 +28,18 @@
   :where(:root[data-ds-family="sijil"]) [data-slot="card"] {
     border-radius: var(--radius-2xl) !important;
     box-shadow: var(--shadow-sm) !important;
-    border-color: transparent;
+    border-color: var(--border);
     transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
   }
 
   :where(:root[data-ds-family="sijil"]) [data-slot="card"]:hover {
-    border-color: transparent;
+    border-color: var(--border);
     box-shadow: var(--shadow-md) !important;
   }
 
   /* Minimalist Dialog content slot */
   :where(:root[data-ds-family="sijil"]) [data-slot="dialog-content"],
-:where(:root[data-ds-family="sijil"]) [data-slot="alert-dialog-content"] {
+  :where(:root[data-ds-family="sijil"]) [data-slot="alert-dialog-content"] {
     border-radius: var(--radius-2xl) !important;
     box-shadow: var(--shadow-xl) !important;
     border-color: var(--border) !important;
@@ -47,8 +47,8 @@
 
   /* Minimalist Popover and Dropdown slots */
   :where(:root[data-ds-family="sijil"]) [data-slot="popover-content"],
-:where(:root[data-ds-family="sijil"]) [data-slot="dropdown-menu-content"],
-:where(:root[data-ds-family="sijil"]) [data-slot="dropdown-menu-sub-content"] {
+  :where(:root[data-ds-family="sijil"]) [data-slot="dropdown-menu-content"],
+  :where(:root[data-ds-family="sijil"]) [data-slot="dropdown-menu-sub-content"] {
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg) !important;
     border-color: var(--border) !important;
@@ -56,27 +56,27 @@
 
   /* Backdrop blur for Dialog & Sheet overlays - soft & minimal */
   :where(:root[data-ds-family="sijil"]) [data-slot="dialog-overlay"],
-:where(:root[data-ds-family="sijil"]) [data-slot="alert-dialog-overlay"],
-:where(:root[data-ds-family="sijil"]) [data-slot="sheet-overlay"] {
+  :where(:root[data-ds-family="sijil"]) [data-slot="alert-dialog-overlay"],
+  :where(:root[data-ds-family="sijil"]) [data-slot="sheet-overlay"] {
     backdrop-filter: blur(4px) !important;
     background-color: rgba(9, 9, 11, 0.4) !important;
   }
 
   /* Minimalist Scrollbar Styling */
   :where(:root[data-ds-family="sijil"])::-webkit-scrollbar,
-:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar {
+  :where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
 
   :where(:root[data-ds-family="sijil"])::-webkit-scrollbar-track,
-:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-track {
+  :where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-track {
     background: transparent;
     cursor: pointer;
   }
 
   :where(:root[data-ds-family="sijil"])::-webkit-scrollbar-thumb,
-:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-thumb {
+  :where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-thumb {
     background: var(--input);
     border-radius: 100px;
     border: 1px solid transparent;
@@ -86,17 +86,17 @@
   }
 
   :where(:root[data-ds-family="sijil"])::-webkit-scrollbar-thumb:hover,
-:where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-thumb:hover {
+  :where(:root[data-ds-family="sijil"]) ::-webkit-scrollbar-thumb:hover {
     background: var(--muted-foreground);
   }
 
-:where(:root[data-ds-family="sijil"]).dark body {
-  background-image: linear-gradient(180deg, #000000, #000000);
-}
+  :where(:root[data-ds-family="sijil"]).dark body {
+    background-image: linear-gradient(180deg, #000000, #000000);
+  }
 
-:where(:root[data-ds-family="sijil"]).dark-blue body {
-  background-image: linear-gradient(180deg, var(--background), #0a111e);
-}
+  :where(:root[data-ds-family="sijil"]).dark-blue body {
+    background-image: linear-gradient(180deg, var(--background), #0a111e);
+  }
 }
 
 @layer utilities {

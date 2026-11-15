@@ -11,3 +11,22 @@ export {
   type ChartConfig,
 } from "./components/chart.js";
 
+export {
+  ChartDefs,
+  type ChartDefsProps,
+  type PatternDef,
+} from "./components/chart-defs.js";
+
+export {
+  ChartLegends,
+  type ChartLegendsProps,
+  type ChartLegendItem,
+  type LegendType,
+} from "./components/chart-legends.js";
+
+export {
+  ChartCard,
+  type ChartCardProps,
+} from "./components/chart-card.js";
+
+

@@ -16,16 +16,35 @@ export { DesignSystemProvider, type DesignSystemProviderProps } from "./provider
 export { useDesignSystem } from "./provider/use-design-system.js";
 export type { DesignSystemContextValue } from "./provider/design-system-context.js";
 export { defaultDesignSystemLabels, type DesignSystemLabels } from "./provider/labels.js";
+export {
+  ThemeProvider,
+  useTheme,
+  type Theme,
+  type ResolvedTheme,
+  type ThemeProviderProps,
+  type ThemeContextValue,
+} from "./provider/theme-provider.js";
 
 // Direction
 export { DirectionProvider, useDirection } from "./components/direction.js";
 
+// Theme & Locale Toggles
+export { ModeToggle, ThemeToggle, type ModeToggleProps } from "./components/mode-toggle.js";
+export { LanguageSwitcher, LanguageToggle, type LanguageSwitcherProps, type AppLanguage } from "./components/language-switcher.js";
+
 // Primitives & form controls
-export { Button, buttonVariants } from "./components/button.js";
+export { Button, buttonVariants, type ButtonProps } from "./components/button.js";
 export { Input } from "./components/input.js";
+export { Textarea, type TextareaProps } from "./components/textarea.js";
 export { Label } from "./components/label.js";
 export { Checkbox } from "./components/checkbox.js";
 export { Switch } from "./components/switch.js";
+export { RadioGroup, type RadioGroupProps } from "./components/radio-group.js";
+export { RadioGroupItem, type RadioGroupItemProps } from "./components/radio-group-item.js";
+export { Slider, type SliderProps } from "./components/slider.js";
+export { Toggle, toggleVariants, type ToggleProps } from "./components/toggle.js";
+export { ToggleGroup, type ToggleGroupProps } from "./components/toggle-group.js";
+export { ToggleGroupItem, type ToggleGroupItemProps } from "./components/toggle-group-item.js";
 export {
   Select,
   SelectContent,
@@ -164,6 +183,8 @@ export {
 // Data display & feedback
 export { Avatar, AvatarFallback, AvatarImage } from "./components/avatar.js";
 export { Badge, badgeVariants } from "./components/badge.js";
+export { Progress, type ProgressProps, type ProgressVariant } from "./components/progress.js";
+export { Spinner, type SpinnerProps, type SpinnerSize } from "./components/spinner.js";
 export {
   Card,
   CardAction,
@@ -175,6 +196,7 @@ export {
 } from "./components/card.js";
 export { EmptyState, type EmptyStateProps } from "./components/empty-state.js";
 export { Skeleton } from "./components/skeleton.js";
+export { ScrollArea, type ScrollAreaProps } from "./components/scroll-area.js";
 export {
   Table,
   TableBody,
@@ -185,10 +207,127 @@ export {
   TableHeader,
   TableRow,
 } from "./components/table.js";
+export {
+  SortableTableHead,
+  SortableFlexTableHead,
+  type SortableTableHeadProps,
+  type SimpleSortDirection,
+} from "./components/sortable-table-head.js";
+export {
+  TableColumnFilter,
+  type TableColumnFilterProps,
+  type ColumnFilterItem,
+} from "./components/table-column-filter.js";
 
-// Layout
+// Layout & Navigation controls
 export { Separator } from "./components/separator.js";
 export { ScreenContainer } from "./components/screen-container.js";
 export { ScreenHeader, type ScreenHeaderProps } from "./components/screen-header.js";
 export { FiltersContainer } from "./components/filters-container.js";
+export {
+  MultiSelectDropdown,
+  type MultiSelectDropdownProps,
+  type MultiSelectOption,
+} from "./components/multi-select-dropdown.js";
+export {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+  buttonGroupVariants,
+} from "./components/button-group.js";
+export {
+  CollapsibleCard,
+  type CollapsibleCardProps,
+} from "./components/collapsible-card.js";
+export {
+  NavMain,
+  type NavMainProps,
+  type NavMainItem,
+  type NavMainSubItem,
+} from "./components/nav-main.js";
+export {
+  NavUser,
+  type NavUserProps,
+  type NavUserData,
+} from "./components/nav-user.js";
+export {
+  TeamSwitcher,
+  SidebarBrand,
+  type TeamSwitcherProps,
+  type SidebarBrandData,
+} from "./components/team-switcher.js";
+export {
+  AppHeader,
+  type AppHeaderProps,
+} from "./components/app-header.js";
+export {
+  MobileBottomNav,
+  type MobileBottomNavProps,
+  type MobileTabItem,
+} from "./components/mobile-bottom-nav.js";
+export {
+  MobileSettingsRow,
+  MobileSettingsSection,
+  type MobileSettingsRowProps,
+} from "./components/mobile-settings-row.js";
+export {
+  ChartDefs,
+  type ChartDefsProps,
+  type PatternDef,
+} from "./components/chart-defs.js";
+export {
+  ChartLegends,
+  type ChartLegendsProps,
+  type ChartLegendItem,
+  type LegendType,
+} from "./components/chart-legends.js";
+export {
+  ChartCard,
+  type ChartCardProps,
+} from "./components/chart-card.js";
+export {
+  PullToRefreshIndicator,
+  type PullToRefreshIndicatorProps,
+  type PullToRefreshPhase,
+} from "./components/pull-to-refresh-indicator.js";
+export {
+  Pagination,
+  type PaginationProps,
+} from "./components/pagination.js";
+export {
+  PaginationContent,
+  type PaginationContentProps,
+} from "./components/pagination-content.js";
+export {
+  PaginationItem,
+  type PaginationItemProps,
+} from "./components/pagination-item.js";
+export {
+  PaginationLink,
+  type PaginationLinkProps,
+} from "./components/pagination-link.js";
+export {
+  PaginationPrevious,
+  type PaginationPreviousProps,
+} from "./components/pagination-previous.js";
+export {
+  PaginationNext,
+  type PaginationNextProps,
+} from "./components/pagination-next.js";
+export { PaginationEllipsis } from "./components/pagination-ellipsis.js";
+export {
+  PeriodNavigator,
+  type PeriodNavigatorProps,
+} from "./components/period-navigator.js";
+export {
+  ActionButtons,
+  type ActionButtonsProps,
+  ActionButtonsHelper,
+  approveButtonClass,
+  refuseButtonClass,
+  ApproveButton,
+  type ApproveButtonProps,
+  RefuseButton,
+  type RefuseButtonProps,
+} from "./components/action-buttons.js";
 

@@ -19,7 +19,7 @@
 @source "../dist";
 
 /* `dark:` applies under every dark theme class (`.dark`, `.dark-blue`). */
-@custom-variant dark (&:is(.dark *, .dark-blue *));
+@custom-variant dark (&:is(.dark, .dark-blue, .dark *, .dark-blue *));
 /* `ltr:` is the logical counterpart of Tailwind's built-in `rtl:`. */
 @custom-variant ltr (&:where(:not([dir="rtl"]), :not([dir="rtl"]) *));
 /* `shell:` applies inside the touch-first app shell (`.app-shell-mobile`). */
@@ -139,6 +139,7 @@
 }
 
 @keyframes click-bounce-up {
+
   0%,
   100% {
     transform: translateY(0);
@@ -185,4 +186,3 @@
     animation: var(--animate-shimmer);
   }
 }
-

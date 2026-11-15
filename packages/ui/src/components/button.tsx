@@ -10,14 +10,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          // "bg-primary text-primary-foreground shadow-md shadow-primary-glow/40 hover:bg-primary/90! hover:shadow-lg hover:shadow-primary-glow hover:translate-y-[-2px] hover:scale-[1.02] active:scale-[0.98] active:translate-y-0 transition-all duration-300 ease-out btn-shimmer",
-          "inline-flex items-center h-full gap-1.5 rounded-md bg-card shadow-sm rounded-xl overflow-hidden px-3 text-sm font-medium text-foreground transition-colors hover:bg-card/10 cursor-pointer active:scale-[0.99] active:translate-y-0 transition-all duration-300 ease-out",
+        "bg-primary text-primary-foreground shadow-sm hover:bg-primary-hover hover:shadow-md active:scale-[0.98] transition-all duration-200 ease-out",
+        header:
+          "inline-flex items-center h-full gap-1.5 rounded-xl bg-card shadow-sm px-3 text-sm font-medium text-foreground transition-colors hover:bg-muted cursor-pointer active:scale-[0.99] transition-all duration-200 ease-out border border-border/50",
         destructive:
-          "bg-destructive text-white shadow-sm hover:bg-destructive-hover! hover:shadow-md transition-all duration-300 ease-out btn-shimmer",
+        "bg-destructive text-white shadow-sm hover:bg-destructive-hover! hover:shadow-md transition-all duration-200 ease-out btn-shimmer",
         outline:
-          "bg-background shadow-[0px_0px_2px_0.05px]  hover:bg-gradient-to-br hover:from-muted-100 hover:to-muted-200 transition-all duration-300",
+        "border border-input bg-background shadow-xs hover:bg-muted hover:text-foreground transition-all duration-200",
         secondary:
-          "bg-secondary shadow-sm text-secondary-foreground hover:bg-secondary-hover! hover:shadow-md hover:translate-y-[-1px] hover:scale-[1.01] active:scale-[0.98] active:translate-y-0 transition-all duration-300 ease-out",
+        "bg-secondary shadow-sm text-secondary-foreground hover:bg-secondary-hover! hover:shadow-md active:scale-[0.98] transition-all duration-200 ease-out",
         ghost:
           "hover:bg-muted hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
@@ -34,6 +35,7 @@ const buttonVariants = cva(
       btnType: {
         success: "",
         warning: "",
+        destructive: "",
         default: "",
         submit: ""
       },
@@ -101,31 +103,31 @@ const buttonVariants = cva(
         btnType: "warning",
         class: "text-warning hover:text-warning/80",
       },
-      // default types
+      // Destructive types
       {
         variant: "default",
-        btnType: "default",
-        class: "bg-warning text-white hover:bg-warning/90! shadow-md shadow-warning/20 hover:shadow-lg hover:shadow-warning/40",
+        btnType: "destructive",
+        class: "bg-destructive text-white hover:bg-destructive-hover! shadow-md shadow-destructive/20 hover:shadow-lg hover:shadow-destructive/40",
       },
       {
         variant: "outline",
-        btnType: "warning",
-        class: "text-warning border-warning hover:bg-warning-light hover:text-warning-text dark:hover:text-warning-text",
+        btnType: "destructive",
+        class: "text-destructive border-destructive hover:bg-danger-light hover:text-danger-text dark:hover:text-danger-text",
       },
       {
         variant: "secondary",
-        btnType: "warning",
-        class: "bg-warning-light text-warning-text hover:bg-primary border border-warning-border/20",
+        btnType: "destructive",
+        class: "bg-danger-light text-danger-text hover:bg-danger-light/80 border border-danger-border/20",
       },
       {
         variant: "ghost",
-        btnType: "warning",
-        class: "text-warning hover:bg-warning-light hover:text-warning-text dark:hover:text-warning-text",
+        btnType: "destructive",
+        class: "text-destructive hover:bg-danger-light hover:text-danger-text dark:hover:text-danger-text",
       },
       {
         variant: "link",
-        btnType: "warning",
-        class: "text-warning hover:text-warning/80",
+        btnType: "destructive",
+        class: "text-destructive hover:text-destructive/80",
       },
       //submit 
       {
@@ -176,6 +178,13 @@ const buttonVariants = cva(
  * @param props.noShimmer - If true, disables the premium shimmer effect on the default variant.
  * @returns A React button or polymorphic slot component.
  */
+type ButtonProps = Omit<React.ComponentProps<"button">, "type"> &
+  Omit<VariantProps<typeof buttonVariants>, "btnType"> & {
+    asChild?: boolean
+    type?: "success" | "warning" | "destructive" | "submit" | "reset" | "button" | ""
+    noShimmer?: boolean
+  }
+
 function Button({
   className,
   variant,
@@ -184,15 +193,10 @@ function Button({
   asChild = false,
   noShimmer,
   ...props
-}: Omit<React.ComponentProps<"button">, "type"> &
-  Omit<VariantProps<typeof buttonVariants>, "btnType"> & {
-    asChild?: boolean
-    type?: "success" | "warning" | "submit" | "reset" | "button" | "",
-    noShimmer?: boolean
-  }) {
+}: ButtonProps) {
   const Comp = asChild ? Slot : "button"
 
-  const isStyleType = type === "success" || type === "warning" || type === "submit"
+  const isStyleType = type === "success" || type === "warning" || type === "destructive" || type === "submit"
   const btnType = isStyleType ? type : undefined
   const htmlType = isStyleType ? "button" : (type as React.ComponentProps<"button">["type"])
 
@@ -206,4 +210,4 @@ function Button({
   )
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants, type ButtonProps }
