@@ -29,7 +29,7 @@
     border-radius: var(--radius-2xl) !important;
     box-shadow: var(--shadow-sm) !important;
     border-color: var(--border);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
   :where(:root[data-ds-family="sijil"]) [data-slot="card"]:hover {
@@ -178,7 +178,7 @@
 :where(:root[data-ds-family="sijil"]) button.rdp-button_previous:not(:disabled),
 :where(:root[data-ds-family="sijil"]) .rdp-dropdown_root,
 :where(:root[data-ds-family="sijil"]) span.cursor-pointer.hover\:bg-muted {
-  transition: background-color 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.15s ease-out, transform 0.15s ease-out !important;
+  transition: background-color 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.15s ease-out, transform 0.15s ease-out;
 }
 
 /* Hover style overrides - gentle neutral borders/bgs */
@@ -268,4 +268,22 @@
 :where(:root[data-ds-family="sijil"]) [data-slot="tooltip-content"].bg-popover [data-radix-tooltip-arrow] {
   background-color: var(--popover) !important;
   fill: var(--popover) !important;
+}
+
+/* ─── Freeze all transitions during theme switching ─── */
+html[data-theme-switching],
+html[data-theme-switching] *,
+html[data-theme-switching] *::before,
+html[data-theme-switching] *::after,
+:root[data-theme-switching],
+:root[data-theme-switching] *,
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+  -webkit-transition: none !important;
+  -moz-transition: none !important;
+  -o-transition: none !important;
+  -ms-transition: none !important;
+  transition: none !important;
+  animation: none !important;
+  animation-duration: 0s !important;
 }

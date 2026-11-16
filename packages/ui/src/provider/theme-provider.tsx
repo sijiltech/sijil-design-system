@@ -39,24 +39,45 @@ const TRANSITION_DISABLE_ID = "sijil-theme-transition-disable";
  * lagging components (fade/transition delay) while the page background snaps.
  */
 const disableTransitions = () => {
-  if (typeof document === "undefined") return () => {};
+  if (typeof document === "undefined") return () => { };
+
+  const root = document.documentElement;
+  root.setAttribute("data-theme-switching", "true");
 
   let css = document.getElementById(TRANSITION_DISABLE_ID) as HTMLStyleElement | null;
   if (!css) {
     css = document.createElement("style");
     css.id = TRANSITION_DISABLE_ID;
-    css.textContent =
-      "*,*::before,*::after{-webkit-transition:none!important;-moz-transition:none!important;-o-transition:none!important;-ms-transition:none!important;transition:none!important;animation-duration:0s!important;}";
+    css.textContent = `
+      html[data-theme-switching],
+      html[data-theme-switching] *,
+      html[data-theme-switching] *::before,
+      html[data-theme-switching] *::after,
+      :root[data-theme-switching],
+      :root[data-theme-switching] *,
+      :root[data-theme-switching] *::before,
+      :root[data-theme-switching] *::after,
+      *, *::before, *::after {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -o-transition: none !important;
+        -ms-transition: none !important;
+        transition: none !important;
+        animation: none !important;
+        animation-duration: 0s !important;
+      }
+    `;
     document.head.appendChild(css);
   }
 
   return () => {
-    // Force a reflow so the browser evaluates new theme variables immediately without transitions
+    // Force a full style and layout flush so the browser evaluates new theme variables immediately without transitions
     if (typeof window !== "undefined") {
-      (() => window.getComputedStyle(document.body))();
+      void document.body.offsetHeight;
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
+          root.removeAttribute("data-theme-switching");
           const el = document.getElementById(TRANSITION_DISABLE_ID);
           if (el) {
             el.remove();
@@ -179,8 +200,8 @@ export function useTheme(): ThemeContextValue {
     return {
       theme: "light",
       resolvedTheme: "light",
-      setTheme: () => {},
-      toggleTheme: () => {},
+      setTheme: () => { },
+      toggleTheme: () => { },
     };
   }
   return context;

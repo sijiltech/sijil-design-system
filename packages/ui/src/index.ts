@@ -184,7 +184,16 @@ export {
 export { Avatar, AvatarFallback, AvatarImage } from "./components/avatar.js";
 export { Badge, badgeVariants } from "./components/badge.js";
 export { Progress, type ProgressProps, type ProgressVariant } from "./components/progress.js";
-export { Spinner, type SpinnerProps, type SpinnerSize } from "./components/spinner.js";
+export { Spinner, type SpinnerProps, type SpinnerSize, type SpinnerVariant } from "./components/spinner.js";
+export {
+  Suspense,
+  LoadingSuspense,
+  SuspenseFallback,
+  LoadingFallback,
+  type SuspenseProps,
+  type SuspenseFallbackProps,
+  type SuspenseVariant,
+} from "./components/suspense.js";
 export {
   Card,
   CardAction,

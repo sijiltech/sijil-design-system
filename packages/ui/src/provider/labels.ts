@@ -22,6 +22,8 @@ export interface DesignSystemLabels {
   sidebarDescription: string;
   /** Label/title of the sidebar toggle controls. */
   sidebarToggle: string;
+  /** Default accessible label for loading indicators and spinners. */
+  loading: string;
 }
 
 /** English fallback used when no provider (or no override) is supplied. */
@@ -34,5 +36,6 @@ export const defaultDesignSystemLabels: DesignSystemLabels = {
   sidebarTitle: "Sidebar",
   sidebarDescription: "Displays the mobile sidebar.",
   sidebarToggle: "Toggle Sidebar",
+  loading: "Loading...",
 };
 

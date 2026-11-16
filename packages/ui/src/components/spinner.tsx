@@ -8,11 +8,18 @@ import { cn } from "../lib/cn.js";
 export type SpinnerSize = "xs" | "sm" | "default" | "lg" | "xl";
 
 /**
+ * Color variant options for the Spinner component.
+ */
+export type SpinnerVariant = "default" | "primary" | "muted" | "current";
+
+/**
  * Properties for the {@link Spinner} component.
  */
 export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Size variant. Defaults to 'default'. */
   size?: SpinnerSize;
+  /** Color variant. Defaults to 'default'. */
+  variant?: SpinnerVariant;
   /** Accessible label for screen readers. Defaults to "Loading...". */
   label?: string;
 }
@@ -25,6 +32,7 @@ export interface SpinnerProps extends React.HTMLAttributes<HTMLSpanElement> {
  */
 function Spinner({
   size = "default",
+  variant = "default",
   label = "Loading...",
   className,
   ...props
@@ -37,12 +45,19 @@ function Spinner({
     xl: "size-8",
   };
 
+  const variantMap: Record<SpinnerVariant, string> = {
+    default: "text-muted-foreground",
+    primary: "text-primary",
+    muted: "text-muted-foreground",
+    current: "text-current",
+  };
+
   return (
     <span
       data-slot="spinner"
       role="status"
       aria-label={label}
-      className={cn("inline-flex items-center justify-center text-muted-foreground", className)}
+      className={cn("inline-flex items-center justify-center", variantMap[variant], className)}
       {...props}
     >
       <Loader2 className={cn("animate-spin", sizeMap[size])} aria-hidden="true" />

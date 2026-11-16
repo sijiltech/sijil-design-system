@@ -1,6 +1,6 @@
 {
   "name": "@sijil/ui",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Sijil private design system: headless-based React components, design tokens and design families.",
   "license": "UNLICENSED",
   "type": "module",
