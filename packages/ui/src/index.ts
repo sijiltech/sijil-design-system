@@ -8,6 +8,7 @@
  */
 
 // Utilities
+export type { GroupVariant } from "./lib/group-variant.js";
 export { cn } from "./lib/cn.js";
 export { useIsMobile } from "./hooks/use-is-mobile.js";
 
@@ -22,6 +23,7 @@ export {
   type Theme,
   type ResolvedTheme,
   type ThemeProviderProps,
+  type ThemeStorage,
   type ThemeContextValue,
 } from "./provider/theme-provider.js";
 
@@ -63,6 +65,7 @@ export {
   FieldDescription,
   FieldError,
   FieldGroup,
+  type FieldGroupProps,
   FieldLabel,
   FieldLegend,
   FieldSeparator,
@@ -70,6 +73,7 @@ export {
   FieldTitle,
 } from "./components/field.js";
 export { DatePickerButton, type DatePickerButtonProps } from "./components/date-picker-button.js";
+export { RecordNavigator, type RecordNavigatorProps } from "./components/record-navigator.js";
 export {
   SegmentedControl,
   type SegmentedControlOption,
@@ -138,6 +142,7 @@ export {
   TabsContent,
   TabsList,
   TabsTrigger,
+  type TabsProps,
   type TabsListProps,
   type TabsTriggerProps,
 } from "./components/tabs.js";
@@ -151,7 +156,7 @@ export {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "./components/breadcrumb.js";
-export { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "./components/accordion.js";
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger, type AccordionProps } from "./components/accordion.js";
 export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./components/collapsible.js";
 export {
   Sidebar,
@@ -231,8 +236,12 @@ export {
 // Layout & Navigation controls
 export { Separator } from "./components/separator.js";
 export { ScreenContainer } from "./components/screen-container.js";
+export { ScreenFrame, type ScreenFrameProps } from "./components/screen-frame.js";
+export { ScreenGrid, type ScreenGridProps } from "./components/screen-grid.js";
 export { ScreenHeader, type ScreenHeaderProps } from "./components/screen-header.js";
-export { FiltersContainer } from "./components/filters-container.js";
+export { ScreenSection } from "./components/screen-section.js";
+export { ScreenToolbar, type ScreenToolbarProps } from "./components/screen-toolbar.js";
+export { FiltersContainer, type FiltersContainerProps } from "./components/filters-container.js";
 export {
   MultiSelectDropdown,
   type MultiSelectDropdownProps,
@@ -243,6 +252,7 @@ export {
   ButtonGroupSeparator,
   ButtonGroupText,
   buttonGroupVariants,
+  type ButtonGroupProps,
 } from "./components/button-group.js";
 export {
   CollapsibleCard,
@@ -340,3 +350,4 @@ export {
   type RefuseButtonProps,
 } from "./components/action-buttons.js";
 
+export { SelectionPopover, type SelectionPopoverOption, type SelectionPopoverProps } from "./components/selection-popover.js";

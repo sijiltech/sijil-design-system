@@ -7,6 +7,8 @@ import { useDesignSystem } from "../provider/use-design-system.js"
 
 /** Props of {@link FlexTable}. */
 export interface FlexTableProps<TData, TValue> {
+  /** Use a transparent header with the existing row striping. */
+  variant?: "default" | "plain"
   /** TanStack column definitions. */
   columns: ColumnDef<TData, TValue>[]
   /** Ids of columns that should start hidden. */
@@ -24,7 +26,7 @@ export interface FlexTableProps<TData, TValue> {
  * @param props - Columns, data and optional hidden columns / init callback.
  * @returns The rendered table.
  */
-export function FlexTable<TData, TValue>({ columns, data, hiddenColumns, onInitialize }: FlexTableProps<TData, TValue>) {
+export function FlexTable<TData, TValue>({ columns, data, hiddenColumns, onInitialize, variant = "default" }: FlexTableProps<TData, TValue>) {
   const { labels } = useDesignSystem()
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -54,8 +56,8 @@ export function FlexTable<TData, TValue>({ columns, data, hiddenColumns, onIniti
 
   return (
 
-    <Table className="font-semibold text-muted-foreground">
-      <TableHeader>
+    <Table className="font-semibold text-muted-foreground" containerClassName={variant === "plain" ? "rounded-none" : undefined}>
+      <TableHeader className={variant === "plain" ? "bg-transparent" : undefined}>
         {
           table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id}>
@@ -69,7 +71,7 @@ export function FlexTable<TData, TValue>({ columns, data, hiddenColumns, onIniti
         }
       </TableHeader>
 
-      <TableBody>
+      <TableBody striped={variant !== "plain"}>
         {
           table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (

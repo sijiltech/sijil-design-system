@@ -25,16 +25,43 @@ import {
   TableCell,
   TableBody,
   Button,
+  type GroupVariant,
 } from "@sijil/ui";
 import {
   ChartDefs,
   ChartLegends,
   ChartCard,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
   type ChartConfig,
 } from "@sijil/ui/chart";
 import { BarChart, Bar, XAxis, YAxis } from "recharts";
-import { Home, Users, Calendar, Settings, FileText } from "lucide-react";
+import {
+  BarChart3,
+  Calendar,
+  CalendarCheck,
+  CalendarClock,
+  ClipboardList,
+  Clock,
+  Columns3,
+  FileCheck,
+  FileText,
+  LayoutDashboard,
+  ListTodo,
+  MonitorPlay,
+  Palmtree,
+  Parasol,
+  Scale,
+  ScrollText,
+  ShieldCheck,
+  ShieldUser,
+  UserCog,
+  Users,
+} from "lucide-react";
+import { usePreviewTheme } from "../.storybook/preview-theme";
 
 const meta: Meta = {
   title: "Components/Extended Ecosystem",
@@ -47,17 +74,18 @@ export default meta;
 type Story = StoryObj;
 
 export const ThemeAndLanguageToggles: Story = {
-  render: () => {
+  render: function ThemeAndLanguageToggles() {
+    const { theme, cycleTheme } = usePreviewTheme();
     const [locale, setLocale] = React.useState<"ar" | "en">("en");
     return (
       <div className="space-y-6 max-w-xl">
-        <div className="p-4 rounded-xl border border-border bg-card space-y-4">
+        <div className="p-4 rounded-2xl bg-card space-y-4">
           <h3 className="font-semibold text-foreground">Theme & Language Toggles</h3>
           <p className="text-sm text-muted-foreground">
             Switch between Light, Dark, and Dark-Blue themes, and toggle between Arabic & English.
           </p>
           <div className="flex items-center gap-3">
-            <ModeToggle />
+            <ModeToggle currentTheme={theme.value} onToggle={cycleTheme} />
             <LanguageSwitcher
               currentLocale={locale}
               onLocaleChange={(next) => setLocale(next)}
@@ -69,6 +97,8 @@ export const ThemeAndLanguageToggles: Story = {
           title="Sijil HR Platform"
           subtitle="Enterprise Human Resources Suite"
           showSidebarTrigger={false}
+          showLanguageSwitcher={false}
+          showModeToggle={false}
         />
       </div>
     );
@@ -93,9 +123,10 @@ export const SortableTableDemo: Story = {
 
     return (
       <div className="space-y-4 max-w-3xl">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
           <h3 className="font-semibold text-foreground">Sortable Table with Column Visibility</h3>
           <TableColumnFilter
+            title="Columns"
             columns={columns.map((c) => ({
               id: c.id,
               label: c.label,
@@ -105,7 +136,7 @@ export const SortableTableDemo: Story = {
           />
         </div>
 
-        <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="rounded-2xl bg-card overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow>
@@ -186,10 +217,59 @@ export const SortableTableDemo: Story = {
   },
 };
 
-export const CollapsibleAndGroups: Story = {
-  render: () => (
+export const CustomColumnFilter: Story = {
+  render: function CustomColumnFilter() {
+    const [showHours, setShowHours] = React.useState(true);
+
+    return (
+      <div className="max-w-md space-y-2">
+        <div className="flex justify-end">
+          <TableColumnFilter
+            title="Columns"
+            side="bottom"
+            align="end"
+            trigger={
+              <Button variant="outline" size="sm">
+                <Columns3 aria-hidden="true" /> Visible columns
+              </Button>
+            }
+            columns={[
+              { id: "employee", label: "Employee", isVisible: true, canHide: false, toggleVisibility: () => {} },
+              { id: "hours", label: "Logged hours", isVisible: showHours, toggleVisibility: () => setShowHours(!showHours) },
+            ]}
+          />
+        </div>
+        <p className="text-sm text-muted-foreground" role="status">
+          Visible columns: Employee{showHours && ", Logged hours"}
+        </p>
+      </div>
+    );
+  },
+};
+
+const departmentOptions = [
+  { id: "engineering", label: "Engineering", color: "var(--color-info)" },
+  { id: "design", label: "Product Design", color: "var(--color-success)" },
+  { id: "hr", label: "Human Resources", color: "var(--color-warning)" },
+  { id: "finance", label: "Finance & Accounting", color: "var(--color-danger)" },
+];
+
+type GroupExampleArgs = {
+  collapsibleVariant: GroupVariant;
+  buttonGroupVariant: GroupVariant;
+};
+
+export const CollapsibleAndGroups: StoryObj<GroupExampleArgs> = {
+  name: "Collapsible and Groups (Card)",
+  args: { collapsibleVariant: "card", buttonGroupVariant: "card" },
+  argTypes: {
+    collapsibleVariant: { name: "Collapsible variant", control: "inline-radio", options: ["plain", "card"] },
+    buttonGroupVariant: { name: "Button Group variant", control: "inline-radio", options: ["plain", "card"] },
+  },
+  render: ({ collapsibleVariant, buttonGroupVariant }) => (
     <div className="space-y-6 max-w-xl">
       <CollapsibleCard
+        variant={collapsibleVariant}
         title="Leave Balance & Allocations"
         description="Employee annual leaves and remaining vacation days."
       >
@@ -200,7 +280,7 @@ export const CollapsibleAndGroups: Story = {
 
       <div className="space-y-2">
         <h4 className="text-sm font-semibold text-foreground">Button Group</h4>
-        <ButtonGroup>
+        <ButtonGroup variant={buttonGroupVariant}>
           <Button variant="outline" size="sm">Day</Button>
           <Button variant="outline" size="sm">Week</Button>
           <Button variant="outline" size="sm">Month</Button>
@@ -213,16 +293,18 @@ export const CollapsibleAndGroups: Story = {
         <h4 className="text-sm font-semibold text-foreground">Multi-Select Dropdown with Badges</h4>
         <MultiSelectDropdown
           placeholder="Filter by departments..."
-          options={[
-            { id: "engineering", label: "Engineering", color: "#3b82f6" },
-            { id: "design", label: "Product Design", color: "#10b981" },
-            { id: "hr", label: "Human Resources", color: "#f59e0b" },
-            { id: "finance", label: "Finance & Accounting", color: "#8b5cf6" },
-          ]}
+          options={departmentOptions}
+          defaultValue={[departmentOptions[1], departmentOptions[3]]}
         />
       </div>
     </div>
   ),
+};
+
+export const PlainCollapsibleAndGroups: StoryObj<GroupExampleArgs> = {
+  ...CollapsibleAndGroups,
+  name: "Collapsible and Groups (Plain)",
+  args: { collapsibleVariant: "plain", buttonGroupVariant: "plain" },
 };
 
 export const ChartEcosystem: Story = {
@@ -251,6 +333,8 @@ export const ChartEcosystem: Story = {
               <ChartDefs />
               <XAxis dataKey="day" stroke="var(--muted-foreground)" />
               <YAxis stroke="var(--muted-foreground)" />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
               <Bar dataKey="hours" fill="url(#diagonalHatchOvertime)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ChartContainer>
@@ -275,46 +359,69 @@ export const SidebarEcosystem: Story = {
   render: () => {
     const navItems = [
       {
-        title: "Dashboard",
-        url: "#",
-        icon: Home,
-        isActive: true,
-      },
-      {
-        title: "Employees & Time Off",
-        url: "#",
-        icon: Users,
+        title: "Attendance",
+        url: "#attendance",
+        icon: CalendarClock,
         items: [
-          { title: "Attendance Sheets", url: "#", isActive: true },
-          { title: "Time Off Requests", url: "#" },
-          { title: "Public Holidays", url: "#" },
+          { title: "Chart", url: "#attendance", icon: BarChart3, isActive: true },
+          { title: "Employees charts", url: "#attendance-employees-log", icon: Users },
+          { title: "Sheet", url: "#attendance-my", icon: CalendarCheck },
+          { title: "Employees sheets", url: "#attendance-employees-sheets", icon: ClipboardList },
         ],
       },
       {
-        title: "Calendar Schedule",
-        url: "#",
-        icon: Calendar,
+        title: "Time off",
+        url: "#time-off",
+        icon: Parasol,
+        items: [
+          { title: "Overview", url: "#time-off", icon: LayoutDashboard },
+          { title: "My requests", url: "#time-off-my", icon: FileText },
+          { title: "My holidays", url: "#time-off-my-holidays", icon: Palmtree },
+          { title: "Employee requests", url: "#time-off-employee-requests", icon: FileCheck },
+        ],
+      },
+      {
+        title: "Session tracker",
+        url: "#tracker",
+        icon: ScrollText,
+        items: [
+          { title: "My activity", url: "#tracker-my", icon: Clock },
+        ],
+      },
+      {
+        title: "Team monitor",
+        url: "#team",
+        icon: Users,
+        items: [
+          { title: "Users", url: "#team", icon: Users },
+          { title: "Apps", url: "#team-apps", icon: MonitorPlay },
+          { title: "Tasks", url: "#team-tasks", icon: ListTodo },
+        ],
       },
       {
         title: "Administration",
-        url: "#",
-        icon: Settings,
+        url: "#administration",
+        icon: ShieldUser,
         items: [
-          { title: "Attendance Policies", url: "#" },
-          { title: "Work Shifts", url: "#" },
+          { title: "Employees", url: "#administration-employees", icon: UserCog },
+          { title: "Attendance policies", url: "#administration-attendance-policies", icon: Scale },
+          { title: "Work schedules", url: "#administration-work-schedules", icon: Calendar },
+          { title: "Holidays", url: "#administration-holidays", icon: Palmtree },
+          { title: "Step-up demo", url: "#step-up-demo", icon: ShieldCheck },
         ],
       },
     ];
 
     return (
-      <div className="h-[550px] border border-border rounded-2xl overflow-hidden flex bg-background">
+      <div className="h-[550px] rounded-2xl overflow-hidden flex bg-background">
         <SidebarProvider defaultOpen={true}>
-          <Sidebar collapsible="icon">
+          <Sidebar collapsible="icon" className="max-w-[var(--sidebar-width)]">
             <SidebarHeader>
               <TeamSwitcher
                 brand={{
                   name: "Sijil HR",
                   subtitle: "Enterprise Suite",
+                  logoSrc: new URL("./assets/sijil-logo.svg", import.meta.url).href,
                 }}
               />
             </SidebarHeader>
@@ -331,7 +438,7 @@ export const SidebarEcosystem: Story = {
               />
             </SidebarFooter>
           </Sidebar>
-          <div className="flex-1 p-6 bg-card m-2 rounded-xl border border-border">
+          <div className="flex-1 p-6 bg-card m-2 rounded-2xl">
             <h3 className="font-semibold text-lg text-foreground">Main App Workspace</h3>
             <p className="text-sm text-muted-foreground mt-1">
               Collapsible sidebar navigation with sub-menus, brand header, and user footer.

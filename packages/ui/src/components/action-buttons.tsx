@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Check, X, Loader2 } from "lucide-react";
 import { cn } from "../lib/cn.js";
+import { groupCardClassName, type GroupVariant } from "../lib/group-variant.js";
 import { Button, type ButtonProps } from "./button.js";
 
 /**
@@ -9,11 +10,11 @@ import { Button, type ButtonProps } from "./button.js";
 export class ActionButtonsHelper {
   /** Standard CSS class string for an approval action button. */
   public static readonly approveButtonClass: string =
-    "h-8 border-success-border text-success hover:bg-success-light dark:text-success-text transition-colors";
+    "h-8 text-success hover:bg-success-light dark:text-success-text transition-colors";
 
   /** Standard CSS class string for a refusal action button. */
   public static readonly refuseButtonClass: string =
-    "h-8 border-danger-border text-danger hover:bg-danger-light dark:text-danger-text transition-colors";
+    "h-8 text-danger hover:bg-danger-light dark:text-danger-text transition-colors";
 }
 
 export const approveButtonClass = ActionButtonsHelper.approveButtonClass;
@@ -107,6 +108,7 @@ export function RefuseButton({
  * Properties for the {@link ActionButtons} component.
  */
 export interface ActionButtonsProps extends React.HTMLAttributes<HTMLDivElement> {
+  variant?: GroupVariant;
   /** Action handler invoked on approve click. */
   onApprove?: () => void;
   /** Action handler invoked on refuse click. */
@@ -138,12 +140,14 @@ export function ActionButtons({
   refuseLabel,
   disabled = false,
   className,
+  variant = "plain",
   ...props
 }: ActionButtonsProps) {
   return (
     <div
       data-slot="action-buttons"
-      className={cn("inline-flex items-center gap-2", className)}
+      data-variant={variant}
+      className={cn("inline-flex items-center gap-2", variant === "card" && groupCardClassName, className)}
       {...props}
     >
       {onApprove && (

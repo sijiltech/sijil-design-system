@@ -38,7 +38,7 @@ export function MobileBottomNav({
     <nav
       aria-label="Mobile Navigation"
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_-8px_rgba(0,0,0,0.1)] transition-colors",
+        "fixed inset-x-0 bottom-0 z-40 rounded-t-2xl bg-card/95 backdrop-blur-md pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_16px_-8px_rgba(0,0,0,0.1)] transition-colors",
         className,
       )}
       {...props}

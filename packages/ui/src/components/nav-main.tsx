@@ -53,10 +53,15 @@ export interface NavMainProps {
   }) => React.ReactNode;
 }
 
+const menuItemClassName =
+  "text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground relative before:absolute ltr:before:left-0 rtl:before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-[3px] before:h-4 before:rounded-e-full before:bg-sidebar-foreground before:opacity-0 data-[state=open]:before:opacity-100 data-[state=open]:bg-transparent data-[state=open]:text-sidebar-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-foreground data-[active=true]:before:opacity-100 data-[active=true]:bg-transparent data-[active=true]:text-sidebar-foreground data-[active=true]:hover:bg-sidebar-accent data-[active=true]:hover:text-sidebar-foreground transition-all duration-150";
+
+const collapsedMenuItemClassName =
+  "text-sidebar-foreground/60 hover:bg-sidebar-accent cursor-pointer hover:text-sidebar-foreground relative before:absolute ltr:before:left-0 rtl:before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-[3px] before:h-4 before:rounded-e-full before:bg-sidebar-foreground before:opacity-0 data-[active=true]:before:opacity-100 data-[active=true]:bg-transparent data-[active=true]:text-sidebar-foreground data-[active=true]:hover:bg-sidebar-accent data-[active=true]:hover:text-sidebar-foreground transition-all duration-150";
+
 /**
- * Standard hierarchical navigation menu for the Sidebar.
- * Features collapsible groups, active route highlighting, smooth chevron transitions,
- * and a floating flyout dropdown menu when the sidebar is collapsed in icon mode.
+ * Hierarchical sidebar navigation copied from the HR app shell on `main`.
+ * Parent rows keep their Lucide icons. Nested rows render titles only, matching HR `NavMain`.
  */
 export function NavMain({ items, className, renderLink }: NavMainProps) {
   const { isMobile, state } = useSidebar();
@@ -65,6 +70,7 @@ export function NavMain({ items, className, renderLink }: NavMainProps) {
     items.filter((item) => item.isActive).map((item) => item.title),
   );
   const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
+  const [animatingSubItem, setAnimatingSubItem] = React.useState<string | null>(null);
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const clearCloseTimeout = () => {
@@ -90,12 +96,18 @@ export function NavMain({ items, className, renderLink }: NavMainProps) {
     scheduleClose();
   };
 
-  const isCollapsed = state === "collapsed" && !isMobile;
+  const handleSubItemClick = (title: string) => {
+    setAnimatingSubItem(title);
+  };
+
+  const handleSubItemAnimationEnd = () => {
+    setAnimatingSubItem(null);
+  };
 
   const defaultLinkRender = ({
     href,
     children,
-    className,
+    className: linkClassName,
     onClick,
   }: {
     href: string;
@@ -103,7 +115,7 @@ export function NavMain({ items, className, renderLink }: NavMainProps) {
     className?: string;
     onClick?: () => void;
   }) => (
-    <a href={href} className={className} onClick={onClick}>
+    <a href={href} className={linkClassName} onClick={onClick}>
       {children}
     </a>
   );
@@ -111,125 +123,77 @@ export function NavMain({ items, className, renderLink }: NavMainProps) {
   const LinkComponent = renderLink ?? defaultLinkRender;
 
   return (
-    <SidebarGroup className={cn("px-2 py-0", className)}>
-      <SidebarMenu>
+    <SidebarGroup className={className}>
+      <SidebarMenu className="pt-5">
         {items.map((item) => {
-          const hasChildren = Boolean(item.items && item.items.length > 0);
-          const Icon = item.icon;
-
-          if (isCollapsed && hasChildren) {
+          if (!item.items?.length) {
             return (
-              <SidebarMenuItem
-                key={item.title}
-                onMouseEnter={() => handleMouseEnter(item.title)}
-                onMouseLeave={handleMouseLeave}
-              >
-                <DropdownMenu
-                  open={openDropdown === item.title}
-                  onOpenChange={(open) => {
-                    if (open) {
-                      clearCloseTimeout();
-                      setOpenDropdown(item.title);
-                    } else {
-                      setOpenDropdown(null);
-                    }
-                  }}
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={item.isActive}
+                  tooltip={item.title}
+                  className={menuItemClassName}
                 >
-                  <DropdownMenuTrigger asChild>
-                    <SidebarMenuButton
-                      tooltip={item.title}
-                      isActive={item.isActive}
-                      className={cn(
-                        "cursor-pointer",
-                        item.isActive && "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
-                      )}
-                    >
-                      {Icon && <Icon className="size-4 shrink-0" />}
-                      <span className="truncate">{item.title}</span>
-                    </SidebarMenuButton>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    side={direction === "rtl" ? "left" : "right"}
-                    align="start"
-                    className="w-52 p-1.5 shadow-lg bg-popover"
-                    onMouseEnter={() => handleMouseEnter(item.title)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                      {item.title}
-                    </div>
-                    {item.items?.map((subItem) => (
-                      <DropdownMenuItem key={subItem.title} asChild>
-                        {LinkComponent({
-                          href: subItem.url,
-                          className: cn(
-                            "flex items-center gap-2 px-2 py-1.5 text-sm rounded-md cursor-pointer",
-                            subItem.isActive && "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
-                          ),
-                          children: (
-                            <>
-                              {subItem.icon && <subItem.icon className="size-4 shrink-0" />}
-                              <span>{subItem.title}</span>
-                            </>
-                          ),
-                        })}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  {LinkComponent({
+                    href: item.url,
+                    className: "flex items-center gap-2 w-full",
+                    children: (
+                      <>
+                        {item.icon ? <item.icon /> : null}
+                        <span className="flex-1 text-start truncate">{item.title}</span>
+                      </>
+                    ),
+                  })}
+                </SidebarMenuButton>
               </SidebarMenuItem>
             );
           }
 
-          if (hasChildren) {
-            const isCategoryOpen = openedCategories.includes(item.title);
-
+          if (isMobile || state === "expanded") {
             return (
               <Collapsible
-                key={item.title}
+                key={`${item.title}-${item.isActive ? "open" : "closed"}`}
                 asChild
-                open={isCategoryOpen}
-                onOpenChange={(isOpen) => {
-                  setOpenedCategories((prev) =>
-                    isOpen ? [...prev, item.title] : prev.filter((t) => t !== item.title),
-                  );
-                }}
+                defaultOpen={openedCategories.includes(item.title)}
                 className="group/collapsible"
+                onOpenChange={(open) => {
+                  if (open) {
+                    setOpenedCategories((prev) => [...prev, item.title]);
+                  } else {
+                    setOpenedCategories((prev) => prev.filter((title) => title !== item.title));
+                  }
+                }}
               >
                 <SidebarMenuItem>
                   <CollapsibleTrigger asChild>
                     <SidebarMenuButton
-                      tooltip={item.title}
-                      isActive={item.isActive}
-                      className={cn(
-                        "cursor-pointer",
-                        item.isActive && "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
-                      )}
+                      isActive={item.items.some((subItem) => subItem.isActive)}
+                      className={menuItemClassName}
                     >
-                      {Icon && <Icon className="size-4 shrink-0" />}
-                      <span className="truncate">{item.title}</span>
-                      <ChevronRight
-                        className={cn(
-                          "ltr:ml-auto rtl:mr-auto size-4 shrink-0 transition-transform duration-200",
-                          "group-data-[state=open]/collapsible:rotate-90",
-                          direction === "rtl" && "rotate-180 group-data-[state=open]/collapsible:rotate-90",
-                        )}
-                      />
+                      {item.icon ? <item.icon /> : null}
+                      <span className="flex-1 text-start truncate">{item.title}</span>
+                      <ChevronRight className="size-4 shrink-0 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 rtl:group-data-[state=closed]/collapsible:rotate-180" />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <SidebarMenuSub className="ltr:ml-3 rtl:mr-3 border-sidebar-border">
-                      {item.items?.map((subItem) => (
+                    <SidebarMenuSub>
+                      {item.items.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild isActive={subItem.isActive}>
+                          <SidebarMenuSubButton
+                            className={cn(
+                              "h-auto",
+                              animatingSubItem === subItem.title && "animate-click-pulse-in",
+                            )}
+                            asChild
+                            isActive={subItem.isActive}
+                            onClick={() => handleSubItemClick(subItem.title)}
+                            onAnimationEnd={handleSubItemAnimationEnd}
+                          >
                             {LinkComponent({
                               href: subItem.url,
-                              children: (
-                                <>
-                                  {subItem.icon && <subItem.icon className="size-3.5 shrink-0" />}
-                                  <span>{subItem.title}</span>
-                                </>
-                              ),
+                              className: "py-1 flex items-center gap-2",
+                              children: <span className="whitespace-normal">{subItem.title}</span>,
                             })}
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
@@ -241,19 +205,61 @@ export function NavMain({ items, className, renderLink }: NavMainProps) {
             );
           }
 
+          const isSubActive = item.items.some((subItem) => subItem.isActive);
           return (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild tooltip={item.title} isActive={item.isActive}>
-                {LinkComponent({
-                  href: item.url,
-                  children: (
-                    <>
-                      {Icon && <Icon className="size-4 shrink-0" />}
-                      <span className="truncate">{item.title}</span>
-                    </>
-                  ),
-                })}
-              </SidebarMenuButton>
+              <DropdownMenu
+                open={openDropdown !== null && openDropdown === item.title}
+                modal={false}
+              >
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    isActive={isSubActive}
+                    className={collapsedMenuItemClassName}
+                    onMouseEnter={() => handleMouseEnter(item.title)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    {item.icon ? <item.icon /> : null}
+                    <span>{item.title}</span>
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  side={direction === "rtl" ? "left" : "right"}
+                  align="start"
+                  sideOffset={12}
+                  className="w-44 rounded-xl bg-popover/95 backdrop-blur-md text-popover-foreground shadow-xl border border-border/40 p-2 space-y-1"
+                  onMouseEnter={clearCloseTimeout}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <div className="px-3 py-1.5 text-[10px] font-bold text-muted-foreground/60 uppercase tracking-wider select-none">
+                    {item.title}
+                  </div>
+                  {item.items.map((subItem) => (
+                    <DropdownMenuItem
+                      key={subItem.title}
+                      asChild
+                      className={cn(
+                        "group/item flex items-center py-2 px-3 text-sm cursor-pointer rounded-lg transition-all duration-200",
+                        subItem.isActive
+                          ? "relative bg-hover-bg text-hover-text focus:bg-hover-bg focus:text-foreground focus:[background-image:none]! font-medium before:absolute ltr:before:left-0 rtl:before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-[3px] before:h-5 before:rounded-r-sm rtl:before:rounded-l-sm before:bg-hover-text"
+                          : "text-muted-foreground hover:bg-hover-bg hover:text-foreground focus:bg-hover-bg focus:text-foreground focus:[background-image:none]!",
+                      )}
+                      onClick={() => handleSubItemClick(subItem.title)}
+                      onAnimationEnd={handleSubItemAnimationEnd}
+                    >
+                      {LinkComponent({
+                        href: subItem.url,
+                        className: "flex items-center w-full",
+                        children: (
+                          <span className={cn(animatingSubItem === subItem.title && "animate-click-pulse-in")}>
+                            {subItem.title}
+                          </span>
+                        ),
+                      })}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </SidebarMenuItem>
           );
         })}
@@ -261,4 +267,3 @@ export function NavMain({ items, className, renderLink }: NavMainProps) {
     </SidebarGroup>
   );
 }
-

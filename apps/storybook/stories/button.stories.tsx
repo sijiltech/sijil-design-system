@@ -9,12 +9,12 @@ const meta: Meta<typeof Button> = {
     variant: "default",
     size: "default",
     disabled: false,
-    noShimmer: false,
+    noShimmer: true,
   },
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "destructive", "outline", "secondary", "ghost", "link"],
+      options: ["default", "toolbar", "destructive", "outline", "bordered", "secondary", "ghost", "link"],
     },
     size: {
       control: "select",
@@ -25,6 +25,7 @@ const meta: Meta<typeof Button> = {
       options: ["", "success", "warning", "destructive", "submit"],
     },
     disabled: { control: "boolean" },
+    fullWidth: { control: "boolean" },
     noShimmer: { control: "boolean" },
   },
 };
@@ -58,6 +59,16 @@ export const SemanticActions: Story = {
       <Button {...args} type="warning">Pending Notice</Button>
       <Button {...args} type="submit">Submit Form</Button>
       <Button {...args} type="destructive">Refuse Request</Button>
+    </div>
+  ),
+};
+
+export const BorderedActions: Story = {
+  render: (args) => (
+    <div className="grid w-32 gap-2">
+      <Button {...args} variant="bordered" size="xs" type="success" fullWidth>Request</Button>
+      <Button {...args} variant="bordered" size="xs" type="warning" fullWidth>Edit</Button>
+      <Button {...args} variant="bordered" size="xs" fullWidth disabled>Unavailable</Button>
     </div>
   ),
 };

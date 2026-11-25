@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Spinner, type SpinnerSize } from "./spinner.js";
 import { useDesignSystem } from "../provider/use-design-system.js";
@@ -66,7 +68,7 @@ const variantClasses: Record<SuspenseVariant, string> = {
   fullPage: "flex flex-1 w-full min-h-[60vh] flex-col items-center justify-center gap-4 p-6 text-center",
   fullscreen: "fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-background/80 backdrop-blur-sm p-6 text-center animate-in fade-in-0 duration-200",
   overlay: "absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-background/70 backdrop-blur-xs p-4 text-center rounded-[inherit] animate-in fade-in-0 duration-150",
-  card: "flex w-full flex-col items-center justify-center gap-3 p-8 rounded-2xl border border-input/60 bg-card/60 backdrop-blur-xs shadow-sm min-h-[220px] text-center",
+  card: "flex w-full flex-col items-center justify-center gap-3 p-8 rounded-2xl bg-card/60 backdrop-blur-xs shadow-sm min-h-[220px] text-center",
   inline: "inline-flex items-center justify-center gap-2 py-1 px-2 text-sm text-muted-foreground",
 };
 

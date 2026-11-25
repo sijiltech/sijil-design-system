@@ -29,7 +29,7 @@ export const DatePickerButton = React.forwardRef<HTMLButtonElement, DatePickerBu
         ref={ref}
         type={type}
         className={cn(
-          "inline-flex items-center justify-center h-auto min-h-10 gap-1.5 rounded-xl bg-card px-4 py-2 text-sm font-medium text-foreground shadow-xs transition-all hover:bg-muted focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer select-none active:scale-[0.98]",
+          "inline-flex items-center justify-center h-auto min-h-10 gap-1.5 rounded-xl bg-card px-4 py-2 text-sm font-medium text-foreground shadow-xs transition-all hover:surface-tint hover:text-hover-text focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring cursor-pointer select-none active:scale-[0.98]",
           useShell && "w-full min-h-11 px-3.5",
           className
         )}

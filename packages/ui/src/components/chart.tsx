@@ -108,6 +108,30 @@ ${colorConfig
  */
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
+/** Shared surface for built-in and custom chart tooltips. */
+function ChartTooltipSurface({
+  heading,
+  children,
+  className,
+  ...props
+}: React.ComponentProps<"div"> & { heading?: React.ReactNode }) {
+  return (
+    <div
+      data-slot="chart-tooltip"
+      className={cn(
+        "bg-popover text-popover-foreground max-w-[280px] rounded-lg border-0 p-2 text-sm shadow-lg animate-in fade-in-0 duration-200",
+        className,
+      )}
+      {...props}
+    >
+      {heading != null && (
+        <div className="mb-2 border-b border-separator pb-1 font-bold">{heading}</div>
+      )}
+      {children}
+    </div>
+  );
+}
+
 /**
  * Custom tooltip content component for Recharts that unifies styles and colors
  * across all charts in the project to match the attendance chart tooltip.
@@ -188,9 +212,9 @@ function ChartTooltipContent({
   const nestLabel = payload.length === 1 && indicator !== "dot";
 
   return (
-    <div
+    <ChartTooltipSurface
       className={cn(
-        "bg-popover text-popover-foreground max-w-[280px] rounded-lg border p-2 text-sm shadow-lg animate-in fade-in-0 duration-200 grid min-w-[8rem] items-start gap-1.5",
+        "grid min-w-[8rem] items-start gap-1.5 rounded-xl",
         className,
       )}
     >
@@ -221,11 +245,11 @@ function ChartTooltipContent({
                       !hideIndicator && (
                         <div
                           className={cn(
-                            "shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg)",
+                            "shrink-0 rounded-xs bg-(--color-bg)",
                             {
                               "h-2.5 w-2.5": indicator === "dot",
                               "w-1": indicator === "line",
-                              "w-0 border-[1.5px] border-dashed bg-transparent":
+                              "w-0.5 min-h-2.5 bg-transparent":
                                 indicator === "dashed",
                               "my-0.5": nestLabel && indicator === "dashed",
                             },
@@ -233,7 +257,9 @@ function ChartTooltipContent({
                           style={
                             {
                               "--color-bg": indicatorColor,
-                              "--color-border": indicatorColor,
+                              backgroundImage: indicator === "dashed"
+                                ? `repeating-linear-gradient(to bottom, ${indicatorColor} 0 2px, transparent 2px 4px)`
+                                : undefined,
                             } as React.CSSProperties
                           }
                         />
@@ -263,7 +289,7 @@ function ChartTooltipContent({
             );
           })}
       </div>
-    </div>
+    </ChartTooltipSurface>
   );
 }
 
@@ -311,7 +337,7 @@ function ChartLegendContent({
                 <itemConfig.icon />
               ) : (
                 <div
-                  className="h-2 w-2 shrink-0 rounded-[2px]"
+                  className="h-2 w-2 shrink-0 rounded-xs"
                   style={{
                     backgroundColor: item.color,
                   }}
@@ -368,6 +394,7 @@ export {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+  ChartTooltipSurface,
   ChartLegend,
   ChartLegendContent,
   ChartStyle,

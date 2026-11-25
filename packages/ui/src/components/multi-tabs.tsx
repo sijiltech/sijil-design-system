@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { cn } from "../lib/cn.js";
+import { groupCardClassName, groupSelectionClassName, groupSurfaceClassName, type GroupVariant } from "../lib/group-variant.js";
 import { useScrollActiveIntoView } from "../hooks/use-scroll-active-into-view.js";
 
 /**
@@ -22,6 +23,8 @@ export interface MultiTabItem<T extends string | number = string | number> {
  * Interface representing properties of the MultiTabs component.
  */
 export interface MultiTabsProps<T extends string | number = string | number> {
+  /** Surface treatment. Defaults to a raised surface with a muted active tab. */
+  variant?: GroupVariant | "surface";
   /** The list of tab items to render */
   list: MultiTabItem<T>[];
   /** The value of the currently selected active tab */
@@ -44,12 +47,14 @@ export function MultiTabs<T extends string | number = string | number>({
   selectedTab,
   action,
   className,
+  variant = "surface",
 }: MultiTabsProps<T>) {
   const stripRef = React.useRef<HTMLDivElement>(null);
   useScrollActiveIntoView(stripRef, "[data-active=true]", selectedTab);
+  const onSurface = variant === "surface";
 
   return (
-    <div ref={stripRef} className={cn("inline-flex max-w-full overflow-x-auto items-center justify-start rounded-xl bg-card p-1 shadow-xs text-sm gap-0.5 shrink-0", className)}>
+    <div ref={stripRef} data-slot="multi-tabs" data-variant={variant} className={cn("inline-flex max-w-full overflow-x-auto items-center justify-start text-sm gap-0.5 shrink-0", variant === "card" && groupCardClassName, onSurface && [groupSurfaceClassName, "shadow-xs"], className)}>
       {list.map((item) => {
         const isActive = selectedTab === item.value;
         return (
@@ -60,10 +65,11 @@ export function MultiTabs<T extends string | number = string | number>({
             data-active={isActive}
             onClick={() => action(item.value)}
             className={cn(
-              "cursor-pointer py-1.5 font-medium transition-all flex shrink-0 items-center justify-center disabled:opacity-50 disabled:pointer-events-none select-none rounded-lg px-3 sm:px-4 text-xs sm:text-sm gap-1.5 h-full whitespace-nowrap shell:grow shell:px-2.5 shell:text-[13px]",
+              "cursor-pointer py-1.5 font-medium transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring flex shrink-0 items-center justify-center disabled:opacity-50 disabled:pointer-events-none select-none px-3 sm:px-4 text-xs sm:text-sm gap-1.5 h-full whitespace-nowrap shell:grow shell:px-2.5 shell:text-[13px]",
+              onSurface ? "rounded-lg transition-all" : "rounded-xl hover:surface-tint hover:text-hover-text",
               isActive
-                ? "bg-muted text-foreground shadow-xs font-semibold"
-                : "text-muted-foreground hover:bg-hover-bg hover:text-hover-text"
+                ? [variant === "surface" ? "bg-muted text-foreground shadow-xs" : groupSelectionClassName[variant], "font-semibold"]
+                : ["text-muted-foreground", onSurface && "hover:bg-hover-bg hover:text-hover-text"]
             )}
           >
             {item.icon && <span className="shrink-0 flex items-center">{item.icon}</span>}

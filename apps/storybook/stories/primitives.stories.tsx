@@ -141,7 +141,7 @@ export const Toggles: StoryObj = {
 
 export const ScrollContainer: StoryObj = {
   render: () => (
-    <ScrollArea maxHeight={140} className="w-80 rounded-xl border border-border/70 p-3 bg-card">
+    <ScrollArea maxHeight={140} className="w-80 p-3 bg-card">
       <div className="space-y-2 text-xs text-muted-foreground">
         <p>Log entry 1: User signed in via Keycloak</p>
         <p>Log entry 2: Attendance sheet calculated for November</p>

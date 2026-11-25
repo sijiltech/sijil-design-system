@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Columns3, Check } from "lucide-react";
+import { Check, Settings2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./dropdown-menu.js";
-import { Button } from "./button.js";
 import { cn } from "../lib/cn.js";
 
 export interface ColumnFilterItem {
@@ -22,7 +21,7 @@ export interface ColumnFilterItem {
 }
 
 export interface TableColumnFilterProps {
-  /** Optional custom trigger button element. Defaults to a standard Columns button. */
+  /** Optional custom trigger element. Defaults to an icon-only settings button. */
   trigger?: React.ReactNode;
   /** List of column descriptors or TanStack Table columns. */
   columns: Array<
@@ -36,8 +35,12 @@ export interface TableColumnFilterProps {
   >;
   /** Title header inside the dropdown. Defaults to "Toggle columns". */
   title?: string;
+  /** Classes applied to the default trigger. Style a custom trigger directly. */
   className?: string;
-  align?: "start" | "center" | "end";
+  /** Preferred side for the menu relative to the trigger. Defaults to "bottom". */
+  side?: React.ComponentProps<typeof DropdownMenuContent>["side"];
+  /** Menu alignment along the preferred side. Defaults to "start". */
+  align?: React.ComponentProps<typeof DropdownMenuContent>["align"];
 }
 
 /**
@@ -49,7 +52,8 @@ export function TableColumnFilter({
   columns,
   title = "Toggle columns",
   className,
-  align = "end",
+  side = "bottom",
+  align = "start",
 }: TableColumnFilterProps) {
   const filterableColumns = React.useMemo(() => {
     return columns.filter((col) => {
@@ -65,17 +69,20 @@ export function TableColumnFilter({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {trigger ?? (
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn("h-8 gap-1.5 px-3 text-xs", className)}
+          <button
+            type="button"
+            aria-label={title || "Toggle columns"}
+            className={cn(
+              "inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-xl text-muted-foreground [box-shadow:none]! transition-colors hover:surface-tint hover:text-hover-text focus-visible:ring-2 focus-visible:ring-ring",
+              className,
+            )}
           >
-            <Columns3 className="size-3.5" />
-            <span>{title}</span>
-          </Button>
+            <Settings2 className="size-4" aria-hidden="true" />
+          </button>
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent
+        side={side}
         align={align}
         className="w-56 max-h-80 overflow-y-auto p-1.5 shadow-lg"
       >
@@ -104,28 +111,27 @@ export function TableColumnFilter({
                     .replace(/([A-Z])/g, " $1")
                     .trim();
 
-            const handleToggle = (e: React.MouseEvent) => {
-              e.preventDefault();
-              if ("toggleVisibility" in col && typeof col.toggleVisibility === "function") {
-                col.toggleVisibility();
-              }
-            };
-
             return (
               <DropdownMenuItem
                 key={col.id}
-                onClick={handleToggle}
-                className="flex items-center justify-between cursor-pointer px-2 py-1.5 text-sm rounded-md"
+                role="menuitemcheckbox"
+                aria-checked={isVisible}
+                onSelect={(event) => {
+                  event.preventDefault();
+                  col.toggleVisibility?.();
+                }}
+                className="cursor-pointer gap-2.5"
               >
-                <span className="capitalize truncate">{label}</span>
                 <span
+                  aria-hidden="true"
                   className={cn(
-                    "flex size-4 items-center justify-center rounded border border-input transition-colors",
-                    isVisible ? "bg-primary border-primary text-primary-foreground" : "opacity-40",
+                    "flex size-[15px] shrink-0 items-center justify-center rounded-lg transition-colors",
+                    isVisible ? "bg-primary" : "bg-input",
                   )}
                 >
-                  {isVisible && <Check className="size-3 stroke-[3]" />}
+                  {isVisible && <Check className="size-2.5 text-primary-foreground" strokeWidth={3} />}
                 </span>
+                <span className="truncate text-foreground">{label}</span>
               </DropdownMenuItem>
             );
           })}

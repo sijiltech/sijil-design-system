@@ -11,10 +11,9 @@ This document describes the architectural principles, boundaries, and design dec
    Consuming Application (sijil_hr, etc.)
                │
                ▼
-   Design System (@sijil/ui)
-               │
-               ▼
-   Headless Primitives (Radix UI, CVA, Tailwind CSS)
+   React components (@sijil/ui)
+               ├── @sijil/theme → Tailwind CSS v4
+               └── Headless primitives (Radix UI, CVA)
    ```
    The design system package has **zero knowledge** of consuming applications, authentication sessions, Redis proxies, API fetchers, or Next.js route structures.
 
@@ -35,6 +34,10 @@ This document describes the architectural principles, boundaries, and design dec
 
 ## 2. Token Architecture & Design Families
 
+### Package Ownership
+
+`@sijil/theme` provides shared colors, fonts, radii, shadows and transition defaults through Tailwind v4 theme variables. It also ships the shared Sijil palettes. `@sijil/ui` provides the React components, component-specific tokens, animations and family slot styles. The UI CSS entry points import the shared theme automatically.
+
 ### Semantic Contract
 
 Tokens are divided into:
@@ -43,8 +46,7 @@ Tokens are divided into:
 
 ### Zero-Specificity Family Stylesheets
 
-Every design family stylesheet targets `:where(:root[data-ds-family="<family>"])`.
-Because `:where()` adds zero specificity, consuming projects can override any token using plain `:root { ... }` or `.dark { ... }` rules without resorting to `!important`.
+Family slot styles target `:where(:root[data-ds-family="<family>"])`. Shared palette variables follow the light root and dark-mode selectors. Override the variable in a rule that matches the desired color mode.
 
 ---
 
@@ -75,5 +77,5 @@ This ensures that lightweight consumers (like small tools or mobile views) do no
 3. **Automated Unit & A11y Tests:**
    - Vitest + Testing Library + jsdom.
    - `vitest-axe` runs automated accessibility audits on interactive components (Buttons, Dialogs, SegmentedControls).
-   - `tests/tokens.test.ts` validates that every token in the contract is present in the family stylesheet.
+   - `tests/tokens.test.ts` validates that every token in the contract is present across the theme and component family stylesheets.
 4. **Storybook:** Interactive isolated workbench rendering components with real-time theme, family, direction, and shell toggles.

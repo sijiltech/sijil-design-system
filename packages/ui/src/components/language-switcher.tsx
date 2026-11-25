@@ -61,7 +61,7 @@ export function LanguageSwitcher({
       disabled={isPending || props.disabled}
       onClick={handleToggle}
       className={cn(
-        "relative shadow-xs h-9 px-2.5 sm:px-3 text-xs sm:text-sm gap-1.5 shrink-0 select-none cursor-pointer",
+        "relative h-9 px-2.5 sm:px-3 text-xs sm:text-sm gap-1.5 shrink-0 select-none cursor-pointer",
         className,
       )}
       aria-label={targetLabel}

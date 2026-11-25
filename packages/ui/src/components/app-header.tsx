@@ -34,7 +34,7 @@ export function AppHeader({
   return (
     <header
       className={cn(
-        "w-full p-2.5 sm:p-6 rounded-b-2xl flex items-center gap-2 border-b mx-auto bg-card text-card-foreground shadow-xs",
+        "w-full p-2.5 sm:p-6 rounded-b-2xl flex items-center gap-2 mx-auto border-separator bg-card text-card-foreground shadow-none",
         maxWidth,
         className,
       )}

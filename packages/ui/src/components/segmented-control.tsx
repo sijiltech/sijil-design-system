@@ -3,6 +3,7 @@
 import * as React from "react";
 
 import { cn } from "../lib/cn.js";
+import { groupCardClassName, groupSelectionClassName, type GroupVariant } from "../lib/group-variant.js";
 
 export interface SegmentedControlOption<T extends string> {
   value: T;
@@ -11,12 +12,14 @@ export interface SegmentedControlOption<T extends string> {
 }
 
 export interface SegmentedControlProps<T extends string> {
+  variant?: GroupVariant | "surface";
   options: SegmentedControlOption<T>[];
   value: T;
   onChange: (value: T) => void;
   /** Accessible name for the radio group. */
   ariaLabel: string;
   className?: string;
+  disabled?: boolean;
 }
 
 /**
@@ -31,12 +34,18 @@ export function SegmentedControl<T extends string>({
   onChange,
   ariaLabel,
   className,
+  variant = "surface",
+  disabled = false,
 }: SegmentedControlProps<T>) {
+  const onSurface = variant === "surface";
+
   return (
     <div
       role="radiogroup"
+      data-slot="segmented-control"
+      data-variant={variant}
       aria-label={ariaLabel}
-      className={cn("grid gap-0.5 rounded-lg bg-background p-0.5", className)}
+      className={cn("grid gap-1", variant === "card" && groupCardClassName, onSurface && "gap-0.5 rounded-lg bg-background p-0.5", className)}
       style={{ gridTemplateColumns: `repeat(${options.length}, minmax(0, 1fr))` }}
     >
       {options.map((option) => {
@@ -45,14 +54,16 @@ export function SegmentedControl<T extends string>({
           <button
             key={option.value}
             type="button"
+            disabled={disabled}
             role="radio"
             aria-checked={active}
             onClick={() => onChange(option.value)}
             className={cn(
-              "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md px-2 text-[13px] transition-colors select-none",
+              "flex h-8 min-w-0 items-center justify-center gap-1 px-2 text-[13px] transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring select-none",
+              onSurface ? "rounded-md" : "rounded-xl hover:surface-tint hover:text-hover-text",
               active
-                ? "bg-card font-semibold text-foreground shadow-sm dark:bg-muted"
-                : "font-medium text-muted-foreground active:bg-hover-bg",
+                ? [variant === "surface" ? "bg-card text-foreground shadow-sm dark:bg-muted" : groupSelectionClassName[variant], "font-semibold"]
+                : ["font-medium text-muted-foreground", onSurface ? "active:bg-hover-bg" : "active:surface-tint"],
             )}
           >
             {option.icon && (

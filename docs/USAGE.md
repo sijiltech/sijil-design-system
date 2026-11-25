@@ -63,10 +63,13 @@ Or for local development via workspace / file dependency:
 ```json
 {
   "dependencies": {
+    "@sijil/theme": "file:../sijil-design-system/packages/theme",
     "@sijil/ui": "file:../sijil-design-system/packages/ui"
   }
 }
 ```
+
+The local file dependencies let the package manager resolve both workspace packages locally. For registry installs, `@sijil/ui` brings in `@sijil/theme` as a dependency.
 
 ### Installing Dependencies
 
@@ -94,6 +97,10 @@ npm install @tanstack/react-table
 ```
 
 ---
+
+### Tailwind Tokens Only
+
+Install `@sijil/theme` if the app needs the shared tokens. Import `@sijil/theme/theme.css` and `@sijil/theme/sijil.css` after `tailwindcss`. See the [theme package](../packages/theme/README.md) for palette and token overrides.
 
 ### 2.1 Next.js (App Router) Setup
 
@@ -411,7 +418,7 @@ export function UserForm() {
   const [notifications, setNotifications] = useState(true);
 
   return (
-    <form className="space-y-4 max-w-md p-6 bg-card border rounded-lg">
+    <form className="space-y-4 max-w-md p-6 bg-card rounded-lg">
       {/* Text Input with Field wrapper */}
       <Field>
         <FieldLabel htmlFor="full-name">الاسم بالكامل</FieldLabel>
@@ -443,7 +450,7 @@ export function UserForm() {
       </div>
 
       {/* Switch Toggle */}
-      <div className="flex items-center justify-between py-2 border-t">
+      <div className="flex items-center justify-between rounded-lg bg-foreground/5 p-2">
         <Label htmlFor="notif-switch" className="cursor-pointer">
           تفعيل إشعارات البريد
         </Label>
@@ -611,51 +618,54 @@ export function FilterDrawer() {
 
 ### 5.4 Screen Shells & Layout Primitives
 
-`ScreenContainer` and `ScreenHeader` provide unified layout framing across all administrative and self-service pages:
+`ScreenFrame` sets the shell's content width. It centers the content by default and supports `width="full"` for a full-width shell. `ScreenContainer` supplies the page padding and the gap between blocks. Inside the mobile shell it uses the shared mobile padding.
+
+`ScreenHeader` places page actions at the inline end via `actions`. Use its children for badges alongside the title. `ScreenToolbar` groups search or filters at the inline start and optional actions at the inline end. Both action rows can wrap in narrow spaces.
+
+`ScreenSection` groups related content with a consistent gap. `ScreenGrid` fits equal-width columns to the available space and supports `itemSize="compact"`, `"default"` and `"wide"`. Use `Card` when a block needs a surface and its own interior padding. Use one `ScreenContainer` per screen so padding does not accumulate.
 
 ```tsx
 import {
+  ScreenFrame,
   ScreenContainer,
+  ScreenGrid,
   ScreenHeader,
+  ScreenSection,
+  ScreenToolbar,
   Card,
   CardHeader,
   CardTitle,
-  CardDescription,
   CardContent,
   Button,
+  Input,
 } from "@sijil/ui";
-import { Download, RefreshCw } from "lucide-react";
 
-export function AttendanceScreen() {
+export function AttendanceScreen({ onExport }: { onExport: () => void }) {
   return (
-    <ScreenContainer className="space-y-6">
-      <ScreenHeader
-        title="سجل الحضور والانصراف"
-        description="متابعة أوقات الحضور والانصراف والتأخير للموظفين."
-        action={
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm">
-              <RefreshCw className="w-4 h-4" />
-              تحديث
-            </Button>
-            <Button variant="default" size="sm">
-              <Download className="w-4 h-4" />
-              تصدير إكسل
-            </Button>
-          </div>
-        }
-      />
-
-      <Card>
-        <CardHeader>
-          <CardTitle>ملخص الشهر الحالي</CardTitle>
-          <CardDescription>إجمالي ساعات العمل ونسب الحضور.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {/* Content */}
-        </CardContent>
-      </Card>
-    </ScreenContainer>
+    <ScreenFrame>
+      <ScreenContainer>
+        <ScreenHeader
+          title="سجل الحضور والانصراف"
+          actions={<Button onClick={onExport}>تصدير إكسل</Button>}
+        />
+        <ScreenToolbar>
+          <Input type="search" aria-label="البحث عن موظف" placeholder="البحث عن موظف" />
+        </ScreenToolbar>
+        <ScreenSection aria-labelledby="attendance-summary">
+          <h2 id="attendance-summary" className="font-semibold">ملخص الشهر الحالي</h2>
+          <ScreenGrid>
+            <Card>
+              <CardHeader><CardTitle>الحضور</CardTitle></CardHeader>
+              <CardContent>48</CardContent>
+            </Card>
+            <Card>
+              <CardHeader><CardTitle>الغياب</CardTitle></CardHeader>
+              <CardContent>2</CardContent>
+            </Card>
+          </ScreenGrid>
+        </ScreenSection>
+      </ScreenContainer>
+    </ScreenFrame>
   );
 }
 ```
@@ -791,7 +801,7 @@ import {
 
 export function EmployeeTable({ rows }: { rows: Array<{ id: string; name: string; dept: string; status: string }> }) {
   return (
-    <div className="rounded-md border bg-card overflow-hidden">
+    <div className="rounded-md bg-card overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
@@ -822,6 +832,10 @@ export function EmployeeTable({ rows }: { rows: Array<{ id: string; name: string
 ```
 
 #### Sortable Table with Column Visibility Filter:
+
+`TableColumnFilter` renders a settings icon. Place it wherever the trigger belongs in your layout,
+or pass `trigger` with your own accessible button. Use `className` to style the default button and
+`side` and `align` to position the menu relative to the trigger.
 
 ```tsx
 import {
@@ -1029,10 +1043,10 @@ import { ScrollArea } from "@sijil/ui";
 
 export function ActivityList({ items }: { items: string[] }) {
   return (
-    <ScrollArea className="h-72 w-full rounded-md border p-4">
+    <ScrollArea className="h-72 w-full rounded-md bg-card p-4">
       <div className="space-y-2">
         {items.map((item, i) => (
-          <div key={i} className="text-sm border-b py-2 last:border-0">
+          <div key={i} className="rounded-md px-2 py-2 text-sm odd:bg-foreground/5">
             {item}
           </div>
         ))}
@@ -1183,4 +1197,3 @@ turbopack: {
 }
 ```
 Because `@sijil/ui` targets `:where(:root[data-ds-family="sijil"])`, consumer CSS rules automatically take priority without needing `!important`.
-

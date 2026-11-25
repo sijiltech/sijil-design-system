@@ -33,10 +33,10 @@ export const Palette: StoryObj = {
             {COLOR_TOKENS.slice(0, 16).map((token) => (
               <div
                 key={token}
-                className="rounded-xl border border-input p-3 bg-card shadow-sm space-y-2"
+                className="rounded-2xl p-3 bg-card shadow-sm space-y-2"
               >
                 <div
-                  className="h-12 w-full rounded-lg border border-border"
+                  className="h-12 w-full rounded-xl"
                   style={{ backgroundColor: `var(--${token})` }}
                 />
                 <div className="text-xs font-mono font-medium truncate">--{token}</div>
@@ -48,19 +48,19 @@ export const Palette: StoryObj = {
         <div>
           <h2 className="text-xl font-semibold mb-4">Status & Feedback Tokens</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="p-4 rounded-xl border border-success-border bg-success-light text-success-text">
+            <div className="p-4 rounded-xl bg-success-light text-success-text">
               <div className="font-semibold text-sm">Success</div>
               <div className="text-xs opacity-80 mt-1 font-mono">--color-success</div>
             </div>
-            <div className="p-4 rounded-xl border border-danger-border bg-danger-light text-danger-text">
+            <div className="p-4 rounded-xl bg-danger-light text-danger-text">
               <div className="font-semibold text-sm">Danger / Destructive</div>
               <div className="text-xs opacity-80 mt-1 font-mono">--color-danger</div>
             </div>
-            <div className="p-4 rounded-xl border border-warning-border bg-warning-light text-warning-text">
+            <div className="p-4 rounded-xl bg-warning-light text-warning-text">
               <div className="font-semibold text-sm">Warning</div>
               <div className="text-xs opacity-80 mt-1 font-mono">--color-warning</div>
             </div>
-            <div className="p-4 rounded-xl border border-border bg-muted text-foreground">
+            <div className="p-4 rounded-xl bg-muted text-foreground">
               <div className="font-semibold text-sm">Info / Muted</div>
               <div className="text-xs opacity-80 mt-1 font-mono">--color-info</div>
             </div>
@@ -73,7 +73,7 @@ export const Palette: StoryObj = {
             {SHADOW_TOKENS.map((shadow) => (
               <div
                 key={shadow}
-                className="h-24 rounded-2xl bg-card border border-border flex items-center justify-center font-mono text-xs font-medium"
+                className="h-24 rounded-2xl bg-card flex items-center justify-center font-mono text-xs font-medium"
                 style={{ boxShadow: `var(--${shadow})` }}
               >
                 --{shadow}

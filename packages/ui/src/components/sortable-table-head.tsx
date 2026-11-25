@@ -119,6 +119,7 @@ export function SortableFlexTableHead({
   children,
   className,
   onClick,
+  showUnsortedIndicator = true,
 }: {
   column?: {
     getIsSorted: () => false | "asc" | "desc";
@@ -128,8 +129,11 @@ export function SortableFlexTableHead({
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  /** Show a neutral indicator before the column is sorted. */
+  showUnsortedIndicator?: boolean;
 }) {
   const isSorted = column ? column.getIsSorted() : false;
+  const iconClassName = showUnsortedIndicator ? "size-3.5 ms-1" : "size-4 ms-2";
 
   const handleClick = () => {
     if (onClick) {
@@ -151,6 +155,7 @@ export function SortableFlexTableHead({
       tabIndex={0}
       className={cn(
         "flex items-center justify-center gap-1.5 cursor-pointer select-none text-sm font-medium transition-colors hover:text-foreground",
+        !showUnsortedIndicator && "gap-2 font-normal",
         className,
       )}
       onClick={handleClick}
@@ -162,9 +167,9 @@ export function SortableFlexTableHead({
       }}
     >
       {children}
-      {isSorted === "asc" && <ArrowUp className="size-3.5 ml-1 rtl:mr-1 text-foreground" />}
-      {isSorted === "desc" && <ArrowDown className="size-3.5 ml-1 rtl:mr-1 text-foreground" />}
-      {!isSorted && <ArrowUpDown className="size-3 ml-1 rtl:mr-1 opacity-30" />}
+      {isSorted === "asc" && <ArrowUp aria-hidden="true" className={cn(iconClassName, "text-foreground")} />}
+      {isSorted === "desc" && <ArrowDown aria-hidden="true" className={cn(iconClassName, "text-foreground")} />}
+      {showUnsortedIndicator && !isSorted && <ArrowUpDown aria-hidden="true" className="size-3 ms-1 opacity-30" />}
     </div>
   );
 }

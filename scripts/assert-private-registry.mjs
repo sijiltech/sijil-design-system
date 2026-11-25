@@ -12,7 +12,7 @@ import { readFileSync } from "node:fs";
 
 const PUBLIC_REGISTRY_PATTERN = /registry\.npmjs\.org|registry\.yarnpkg\.com/i;
 
-const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+const pkg = JSON.parse(readFileSync("package.json", "utf8"));
 const registry =
   process.env["npm_config_@sijil:registry"] ??
   process.env.npm_config_registry ??
@@ -29,4 +29,3 @@ if (PUBLIC_REGISTRY_PATTERN.test(registry)) {
 }
 
 console.log(`[assert-private-registry] Publishing ${pkg.name}@${pkg.version} to ${registry}`);
-

@@ -22,6 +22,8 @@ describe("MultiTabs component", () => {
     render(<MultiTabs list={tabs} selectedTab="active" action={vi.fn()} />);
     const activeTab = screen.getByRole("button", { name: "Active" });
     expect(activeTab).toHaveAttribute("data-active", "true");
+    expect(activeTab).toHaveClass("rounded-lg", "bg-muted");
+    expect(activeTab.parentElement).toHaveClass("rounded-xl", "bg-card");
   });
 
   it("calls action on click", () => {

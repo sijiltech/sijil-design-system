@@ -1,17 +1,19 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./card.js";
-import { Button } from "./button.js";
+import { ChevronDown } from "lucide-react";
+import { Card, CardContent } from "./card.js";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./collapsible.js";
 import { cn } from "../lib/cn.js";
+import type { GroupVariant } from "../lib/group-variant.js";
 
 export interface CollapsibleCardProps {
+  /** Surface around the header and content. Defaults to card. */
+  variant?: GroupVariant;
   title: React.ReactNode;
   description?: React.ReactNode;
   badge?: React.ReactNode;
@@ -30,6 +32,7 @@ export interface CollapsibleCardProps {
  * Features an interactive header with title, badges, actions, and smooth chevron rotation.
  */
 export function CollapsibleCard({
+  variant = "card",
   title,
   description,
   badge,
@@ -44,6 +47,8 @@ export function CollapsibleCard({
 }: CollapsibleCardProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
   const isOpen = propOpen ?? uncontrolledOpen;
+  const titleId = React.useId();
+  const descriptionId = React.useId();
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (propOpen === undefined) {
@@ -54,51 +59,65 @@ export function CollapsibleCard({
 
   return (
     <Collapsible
+      data-variant={variant}
       open={isOpen}
       onOpenChange={handleOpenChange}
       className={cn("w-full", className)}
     >
-      <Card className="overflow-hidden transition-all duration-200">
+      <Card
+        data-slot={variant === "card" ? "card" : "collapsible-card-surface"}
+        className={cn(
+          "gap-3 overflow-hidden",
+          variant === "card" ? "p-1" : "rounded-none bg-transparent p-0 text-foreground shadow-none",
+        )}
+      >
         <div
+          data-slot="collapsible-card-header"
           className={cn(
-            "flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 select-none",
+            "relative isolate flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl px-3 py-2.5 select-none",
+            variant === "card" && "bg-foreground/5",
             headerClassName,
           )}
         >
-          <div className="flex items-center gap-2.5 min-w-0">
-            <CollapsibleTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon-sm"
-                className="size-7 shrink-0 cursor-pointer text-muted-foreground hover:text-foreground"
-                aria-label={isOpen ? "Collapse" : "Expand"}
-              >
-                <ChevronDown
-                  className={cn(
-                    "size-4 transition-transform duration-200",
-                    isOpen ? "rotate-0" : "-rotate-90 rtl:rotate-90",
-                  )}
-                />
-              </Button>
-            </CollapsibleTrigger>
-            <div className="space-y-0.5 truncate">
-              <div className="flex items-center gap-2">
-                <span className="font-semibold text-sm sm:text-base text-foreground truncate">
+          <CollapsibleTrigger
+            type="button"
+            aria-labelledby={titleId}
+            aria-describedby={description ? descriptionId : undefined}
+            className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 text-start after:absolute after:inset-0 after:rounded-xl hover:after:surface-tint focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
+          >
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-card text-muted-foreground">
+              <ChevronDown
+                aria-hidden="true"
+                className={cn(
+                  "size-4 transition-transform duration-200",
+                  isOpen ? "rotate-0" : "-rotate-90 rtl:rotate-90",
+                )}
+              />
+            </span>
+            <span className="min-w-0 space-y-0.5">
+              <span className="flex items-center gap-2">
+                <span id={titleId} className="truncate text-sm font-semibold text-foreground sm:text-base">
                   {title}
                 </span>
                 {badge}
-              </div>
+              </span>
               {description && (
-                <p className="text-xs text-muted-foreground truncate">{description}</p>
+                <span id={descriptionId} className="block truncate text-xs text-muted-foreground">
+                  {description}
+                </span>
               )}
-            </div>
-          </div>
+            </span>
+          </CollapsibleTrigger>
 
-          {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+          {actions && (
+            <div className="pointer-events-none relative z-10 flex shrink-0 items-center gap-2 [&>*]:pointer-events-auto">
+              {actions}
+            </div>
+          )}
         </div>
 
         <CollapsibleContent className="transition-all duration-200 data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-          <CardContent className={cn("pt-0 px-4 sm:px-5 pb-5", contentClassName)}>
+          <CardContent className={cn("px-3 pb-3 pt-1", contentClassName)}>
             {children}
           </CardContent>
         </CollapsibleContent>

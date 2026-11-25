@@ -81,7 +81,8 @@ describe("Suspense and SuspenseFallback Suite", () => {
       rerender(<SuspenseFallback variant="card" />);
       fallback = container.querySelector("[data-slot='suspense-fallback']");
       expect(fallback).toHaveAttribute("data-variant", "card");
-      expect(fallback?.className).toContain("rounded-2xl border");
+      expect(fallback).toHaveClass("rounded-2xl", "bg-card/60");
+      expect(fallback).not.toHaveClass("border");
 
       rerender(<SuspenseFallback variant="fullPage" />);
       fallback = container.querySelector("[data-slot='suspense-fallback']");

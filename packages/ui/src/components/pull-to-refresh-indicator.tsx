@@ -47,7 +47,7 @@ export const PullToRefreshIndicator = React.forwardRef<
     >
       <div
         className={cn(
-          "flex size-10 items-center justify-center rounded-full bg-card shadow-lg ring-1 ring-border transition-colors",
+          "flex size-10 items-center justify-center rounded-full bg-card shadow-lg transition-colors",
           phase === "armed" || phase === "refreshing"
             ? "text-primary shadow-primary/20"
             : "text-muted-foreground",
@@ -63,8 +63,8 @@ export const PullToRefreshIndicator = React.forwardRef<
             style={{ transform: "rotate(calc(var(--ptr-progress, 0) * 300deg))" }}
           />
         )}
-        <span className="sr-only">{label}</span>
       </div>
+      <span role="status" aria-live="polite" className="sr-only">{phase === "idle" ? "" : label}</span>
     </div>
   );
 });

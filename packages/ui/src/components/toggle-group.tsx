@@ -1,7 +1,9 @@
+"use client";
+
 import * as React from "react";
-import type { VariantProps } from "class-variance-authority";
 import { cn } from "../lib/cn.js";
-import type { toggleVariants } from "./toggle.js";
+import { groupCardClassName, type GroupVariant } from "../lib/group-variant.js";
+import type { ToggleProps } from "./toggle.js";
 import { ToggleGroupContext } from "./toggle-group-context.js";
 
 /**
@@ -9,7 +11,11 @@ import { ToggleGroupContext } from "./toggle-group-context.js";
  */
 export interface ToggleGroupProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange">,
-    VariantProps<typeof toggleVariants> {
+    Pick<ToggleProps, "size"> {
+  /** Group surface or the legacy toggle item style. */
+  variant?: GroupVariant | ToggleProps["variant"];
+  /** Item style for use with an explicit group surface. */
+  itemVariant?: ToggleProps["variant"];
   /** Selection mode: 'single' allows one item; 'multiple' allows several items. */
   type?: "single" | "multiple";
   /** Controlled value. */
@@ -31,6 +37,7 @@ export interface ToggleGroupProps
 function ToggleGroup({
   className,
   variant,
+  itemVariant,
   size,
   type = "single",
   value: controlledValue,
@@ -40,6 +47,9 @@ function ToggleGroup({
   children,
   ...props
 }: ToggleGroupProps) {
+  const isGroupVariant = variant === "plain" || variant === "card";
+  const groupVariant = isGroupVariant ? variant : "card";
+  const toggleVariant = itemVariant === undefined && !isGroupVariant ? variant : itemVariant;
   const [internalValue, setInternalValue] = React.useState<string | string[]>(
     defaultValue ?? (type === "multiple" ? [] : "")
   );
@@ -73,19 +83,21 @@ function ToggleGroup({
       value: currentValue,
       type,
       onItemToggle: handleItemToggle,
-      variant,
+      variant: toggleVariant,
+      groupVariant,
       size,
       disabled,
     }),
-    [currentValue, type, handleItemToggle, variant, size, disabled]
+    [currentValue, type, handleItemToggle, toggleVariant, groupVariant, size, disabled]
   );
 
   return (
     <ToggleGroupContext.Provider value={contextValue}>
       <div
         data-slot="toggle-group"
+        data-variant={groupVariant}
         role="group"
-        className={cn("inline-flex items-center gap-1", className)}
+        className={cn("inline-flex items-center gap-1", groupVariant === "card" && groupCardClassName, className)}
         {...props}
       >
         {children}

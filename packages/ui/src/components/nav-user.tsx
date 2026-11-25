@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, LogOut, Settings, User } from "lucide-react";
+import { BadgeCheck, ChevronsUpDown, LogOut, UserCircle } from "lucide-react";
 import { cn } from "../lib/cn.js";
+import { useDirection } from "./direction.js";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar.js";
 import {
   DropdownMenu,
@@ -30,6 +31,7 @@ export interface NavUserData {
 export interface NavUserProps {
   user: NavUserData;
   onProfileClick?: () => void;
+  profileLink?: React.ReactNode;
   onSettingsClick?: () => void;
   onLogoutClick?: () => void;
   labels?: {
@@ -48,6 +50,7 @@ export interface NavUserProps {
 export function NavUser({
   user,
   onProfileClick,
+  profileLink,
   onSettingsClick,
   onLogoutClick,
   labels,
@@ -55,6 +58,7 @@ export function NavUser({
   children,
 }: NavUserProps) {
   const { isMobile } = useSidebar();
+  const direction = useDirection();
   const [isOpen, setIsOpen] = React.useState(false);
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -100,77 +104,76 @@ export function NavUser({
             <SidebarMenuButton
               variant="outline"
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <Avatar className="size-8 rounded-lg shrink-0">
-                {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-                <AvatarFallback className="rounded-lg text-xs font-semibold">
+              <Avatar className="h-8 w-8 rounded-lg cursor-pointer shadow-xl">
+                {user.avatar && <AvatarImage className="bg-white" src={user.avatar} alt={user.name} />}
+                <AvatarFallback className="rounded-lg bg-card border-2 border-primary text-primary text-sm font-bold dark:bg-white dark:text-black">
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-start text-sm leading-tight truncate">
-                <span className="truncate font-semibold">{user.name}</span>
-                {user.email && (
-                  <span className="truncate text-xs text-muted-foreground">{user.email}</span>
-                )}
+              <div className="grid flex-1 text-start text-sm leading-tight">
+                <span className="truncate font-medium">{user.name}</span>
+                {user.email && <span className="truncate text-sm">{user.email}</span>}
               </div>
-              <ChevronsUpDown className="ltr:ml-auto rtl:mr-auto size-4 shrink-0 opacity-70" />
+              <ChevronsUpDown className="ltr:ml-auto rtl:mr-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg p-1.5 shadow-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
+            className="w-44 rounded-xl bg-popover/95 backdrop-blur-md text-popover-foreground shadow-xl border border-border/40 p-2 space-y-1"
+            side={isMobile ? "bottom" : direction === "rtl" ? "left" : "right"}
+            align="start"
+            sideOffset={12}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
             <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-2 py-1.5 text-start text-sm">
-                <Avatar className="size-8 rounded-lg shrink-0">
-                  {user.avatar && <AvatarImage src={user.avatar} alt={user.name} />}
-                  <AvatarFallback className="rounded-lg text-xs font-semibold">
-                    {initials}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="grid flex-1 text-start text-sm leading-tight truncate">
-                  <span className="truncate font-semibold">{user.name}</span>
+              <div className="flex items-center gap-2 px-3 py-2 text-start text-sm">
+                <div className="grid flex-1 text-start text-sm leading-tight">
+                  <span className="truncate font-medium">{user.name}</span>
                   {user.email && (
-                    <span className="truncate text-xs text-muted-foreground">{user.email}</span>
+                    <span className="truncate text-sm text-muted-foreground">{user.email}</span>
                   )}
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            {(children || profileLink || onProfileClick || onSettingsClick || onLogoutClick) && (
+              <DropdownMenuSeparator className="bg-border/40" />
+            )}
 
             {children ? (
               children
             ) : (
               <>
                 <DropdownMenuGroup>
-                  {onProfileClick && (
-                    <DropdownMenuItem onClick={onProfileClick} className="cursor-pointer gap-2">
-                      <User className="size-4 opacity-70" />
-                      <span>{labels?.profile ?? "Profile"}</span>
+                  {profileLink ?? (onProfileClick && (
+                    <DropdownMenuItem
+                      onClick={onProfileClick}
+                      className="flex items-center gap-2 py-2 px-3 text-sm cursor-pointer rounded-lg transition-all duration-200 text-muted-foreground hover:bg-hover-bg hover:text-foreground focus:bg-hover-bg focus:text-foreground"
+                    >
+                      <UserCircle />
+                      {labels?.profile ?? "Profile"}
                     </DropdownMenuItem>
-                  )}
+                  ))}
                   {onSettingsClick && (
-                    <DropdownMenuItem onClick={onSettingsClick} className="cursor-pointer gap-2">
-                      <Settings className="size-4 opacity-70" />
-                      <span>{labels?.settings ?? "Settings"}</span>
+                    <DropdownMenuItem
+                      onClick={onSettingsClick}
+                      className="flex items-center gap-2 py-2 px-3 text-sm cursor-pointer rounded-lg transition-all duration-200 text-muted-foreground hover:bg-hover-bg hover:text-foreground focus:bg-hover-bg focus:text-foreground"
+                    >
+                      <BadgeCheck />
+                      {labels?.settings ?? "Settings"}
                     </DropdownMenuItem>
                   )}
                 </DropdownMenuGroup>
-                {(onProfileClick || onSettingsClick) && onLogoutClick && <DropdownMenuSeparator />}
                 {onLogoutClick && (
                   <DropdownMenuItem
                     onClick={onLogoutClick}
-                    className="cursor-pointer gap-2 text-destructive focus:text-destructive"
+                    className="flex items-center gap-2 py-2 px-3 text-sm cursor-pointer rounded-lg transition-all duration-200 text-muted-foreground hover:bg-hover-bg hover:text-foreground focus:bg-hover-bg focus:text-foreground"
                   >
-                    <LogOut className="size-4 opacity-70" />
-                    <span>{labels?.logout ?? "Log out"}</span>
+                    <LogOut />
+                    {labels?.logout ?? "Log out"}
                   </DropdownMenuItem>
                 )}
               </>

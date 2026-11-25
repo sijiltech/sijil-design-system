@@ -11,6 +11,8 @@ export interface ChartCardProps extends Omit<React.ComponentProps<typeof Card>, 
   /** Right-aligned header controls (e.g. PeriodNavigator, DatePicker, FilterSelect). */
   actions?: React.ReactNode;
   isLoading?: boolean;
+  contentClassName?: string;
+  overlay?: React.ReactNode;
   children: React.ReactNode;
 }
 
@@ -23,6 +25,8 @@ export function ChartCard({
   description,
   actions,
   isLoading = false,
+  contentClassName,
+  overlay,
   children,
   className,
   ...props
@@ -42,15 +46,16 @@ export function ChartCard({
           {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
         </CardHeader>
       )}
-      <CardContent className="pt-0">
+      <CardContent className={cn("pt-0", contentClassName)}>
         {isLoading ? (
           <div className="flex h-72 w-full items-center justify-center">
-            <Skeleton className="h-full w-full rounded-lg" />
+            <Skeleton className="h-full w-full rounded-2xl" />
           </div>
         ) : (
           children
         )}
       </CardContent>
+      {overlay}
     </Card>
   );
 }

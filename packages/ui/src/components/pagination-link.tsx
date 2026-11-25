@@ -1,16 +1,19 @@
 import * as React from "react";
 import { cn } from "../lib/cn.js";
-import { buttonVariants, type ButtonProps } from "./button.js";
+import { Button, buttonVariants, type ButtonProps } from "./button.js";
 
 /**
  * Properties for the {@link PaginationLink} component.
  */
-export interface PaginationLinkProps
-  extends Omit<React.ComponentProps<"a">, "type">,
-    Pick<ButtonProps, "size"> {
-  /** Whether this link corresponds to the currently active page. */
+interface PaginationLinkCommonProps {
+  size?: ButtonProps["size"];
   isActive?: boolean;
 }
+
+export type PaginationLinkProps = PaginationLinkCommonProps & (
+  | (Omit<React.ComponentProps<"a">, "type"> & { asButton?: false })
+  | (Omit<ButtonProps, "size" | "type" | "asChild"> & { asButton: true })
+);
 
 /**
  * Clickable page number link within {@link Pagination}.
@@ -18,12 +21,23 @@ export interface PaginationLinkProps
  * @param props - Component configuration properties.
  * @returns React element rendering the pagination link.
  */
-function PaginationLink({
-  className,
-  isActive = false,
-  size = "icon",
-  ...props
-}: PaginationLinkProps) {
+function PaginationLink(props: PaginationLinkProps) {
+  if (props.asButton) {
+    const { asButton: _asButton, isActive = false, size = "icon", ...buttonProps } = props;
+    return (
+      <Button
+        type="button"
+        data-slot="pagination-link"
+        aria-current={isActive ? "page" : undefined}
+        data-active={isActive}
+        variant={isActive ? "outline" : "ghost"}
+        size={size}
+        {...buttonProps}
+      />
+    );
+  }
+
+  const { asButton: _asButton, isActive = false, size = "icon", className, ...linkProps } = props;
   return (
     <a
       aria-current={isActive ? "page" : undefined}
@@ -34,10 +48,10 @@ function PaginationLink({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
-        isActive && "border-primary bg-primary/10 text-primary font-bold shadow-2xs",
+        isActive && "bg-primary/10 text-primary font-bold shadow-2xs",
         className
       )}
-      {...props}
+      {...linkProps}
     />
   );
 }

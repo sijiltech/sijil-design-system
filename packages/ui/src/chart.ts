@@ -8,6 +8,7 @@ export {
   ChartStyle,
   ChartTooltip,
   ChartTooltipContent,
+  ChartTooltipSurface,
   type ChartConfig,
 } from "./components/chart.js";
 

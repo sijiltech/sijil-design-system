@@ -1,5 +1,5 @@
 /**
- * Semantic design-token contract.
+ * Semantic design-token contract used by @sijil/theme and @sijil/ui.
  *
  * Every design family MUST define each of these CSS custom properties for every
  * theme it ships (light + dark variants). Components and the Tailwind theme
@@ -32,6 +32,7 @@ export const COLOR_TOKENS = [
   "destructive",
   "destructive-hover",
   "border",
+  "separator",
   "input",
   "ring",
   "sidebar",
@@ -71,7 +72,7 @@ export const STATUS_TOKENS = [
 ] as const;
 
 /** Elevation scale. */
-export const SHADOW_TOKENS = ["shadow-sm", "shadow-md", "shadow-lg", "shadow-xl"] as const;
+export const SHADOW_TOKENS = ["shadow-2xs", "shadow-xs", "shadow-sm", "shadow-md", "shadow-lg", "shadow-xl", "shadow-2xl"] as const;
 
 /** Tokens that do not change between light and dark themes. */
 export const STRUCTURAL_TOKENS = [
@@ -99,4 +100,3 @@ export const FAMILY_TOKENS = [...STRUCTURAL_TOKENS] as const;
 export type DesignToken =
   | (typeof THEMED_TOKENS)[number]
   | (typeof FAMILY_TOKENS)[number];
-

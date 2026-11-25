@@ -1,0 +1,176 @@
+/* Shared Sijil palette and typography for light, dark and dark-blue. */
+:root {
+  --ds-font-sans: var(--font-roboto, "Roboto", ui-sans-serif, system-ui, sans-serif);
+
+  --radius: 0.35rem;
+
+  /* Light theme anchored around #213d67 */
+  --background: #f3f3f3;
+  --foreground: #213d67;
+
+  --primary: #213d67;
+  --primary-hover: #2d5289;
+  --primary-glow: rgba(33, 61, 103, 0.35);
+  --primary-foreground: #f7fbff;
+
+  --secondary: #f0f1f3;
+  --secondary-hover: #e4e5e9;
+  --secondary-foreground: #17315b;
+
+  --muted: #f4f5f7;
+  --muted-foreground: #5b6f8e;
+
+  --accent: #213d67;
+  --accent-foreground: #f7fbff;
+
+  --destructive: #d14c63;
+  --destructive-hover: #c0392f;
+
+  --border: transparent;
+  --separator: #d8dfe9;
+  --input: #e2e5ea;
+  --ring: #213d67;
+
+  --shadow-2xs: 0 1px 1px rgb(20 35 57 / 0.06);
+  --shadow-xs: 0 1px 2px rgb(20 35 57 / 0.08);
+  --shadow-sm: 0 1px 3px rgb(20 35 57 / 0.09), 0 1px 2px rgb(20 35 57 / 0.05);
+  --shadow-md: 0 3px 8px -2px rgb(20 35 57 / 0.11), 0 1px 3px rgb(20 35 57 / 0.05);
+  --shadow-lg: 0 6px 16px -4px rgb(20 35 57 / 0.14), 0 2px 6px -2px rgb(20 35 57 / 0.07);
+  --shadow-xl: 0 12px 26px -6px rgb(20 35 57 / 0.16), 0 4px 9px -3px rgb(20 35 57 / 0.08);
+  --shadow-2xl: 0 24px 48px -12px rgb(20 35 57 / 0.21);
+
+  --color-success: #16a34a;
+  --color-success-light: rgba(22, 163, 74, 0.1);
+  --color-success-border: rgba(16, 185, 129, 0.3);
+  --color-success-text: #166534;
+  --color-danger: #dc2626;
+  --color-danger-light: rgba(220, 38, 38, 0.1);
+  --color-danger-border: rgba(239, 68, 68, 0.3);
+  --color-danger-text: #991b1b;
+  --color-warning: #ca8a04;
+  --color-warning-light: rgba(202, 138, 4, 0.1);
+  --color-warning-border: rgba(234, 179, 8, 0.3);
+  --color-warning-text: #854d0e;
+  --color-info: #2563eb;
+  --color-info-light: rgba(37, 99, 235, 0.1);
+
+  --hover-bg: rgba(0, 0, 0, 0.05);
+  --hover-border: rgba(0, 0, 0, 0.1);
+  --hover-text: #213d67;
+}
+
+:root.dark,
+[data-theme="dark"],
+.dark {
+  /* Black surfaces with semantic status colors. */
+  --background: #000000;
+  --foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-hover: #e2e2e2;
+  --primary-glow: rgba(255, 255, 255, 0.28);
+  --primary-foreground: #000000;
+  --secondary: #202020;
+  --secondary-hover: #2a2a2a;
+  --secondary-foreground: #ffffff;
+  --muted: #2d303d;
+  --muted-foreground: #ffffff;
+  --accent: #ffffff;
+  --accent-foreground: #000000;
+  --destructive: #ff8fa3;
+  --destructive-hover: #ef8b84;
+  --border: transparent;
+  --separator: #383838;
+  --input: #404040;
+  --ring: #bdbdbd;
+
+  --shadow-2xs: 0 1px 1px rgb(0 0 0 / 0.22);
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.26);
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.32), 0 1px 2px rgb(0 0 0 / 0.16);
+  --shadow-md: 0 3px 9px -2px rgb(0 0 0 / 0.39), 0 1px 3px rgb(0 0 0 / 0.19);
+  --shadow-lg: 0 7px 18px -4px rgb(0 0 0 / 0.48), 0 2px 6px -2px rgb(0 0 0 / 0.23);
+  --shadow-xl: 0 13px 29px -6px rgb(0 0 0 / 0.54), 0 4px 10px -3px rgb(0 0 0 / 0.26);
+  --shadow-2xl: 0 24px 48px -12px rgb(0 0 0 / 0.64);
+
+  --hover-bg: rgba(255, 255, 255, 0.08);
+  --hover-border: rgba(255, 255, 255, 0.15);
+  --hover-text: #ffffff;
+
+  --color-success: #10b981;
+  --color-success-light: rgba(16, 185, 129, 0.15);
+  --color-success-border: rgba(52, 211, 153, 0.3);
+  --color-success-text: #a7f3d0;
+
+  --color-danger: #f43f5e;
+  --color-danger-light: rgba(244, 63, 94, 0.15);
+  --color-danger-border: rgba(251, 113, 133, 0.3);
+  --color-danger-text: #fecdd3;
+
+  --color-warning: #d97706;
+  --color-warning-light: rgba(217, 119, 6, 0.15);
+  --color-warning-border: rgba(245, 158, 11, 0.3);
+  --color-warning-text: #fde68a;
+
+  --color-info: #60a5fa;
+  --color-info-light: rgba(96, 165, 250, 0.15);
+}
+
+:root.dark-blue,
+[data-theme="dark-blue"],
+.dark-blue {
+  --background: #0d1525;
+  --foreground: #e7eef8;
+
+  --primary: #3b82f6;
+  --primary-hover: #60a5fa;
+  --primary-glow: rgba(59, 130, 246, 0.35);
+  --primary-foreground: #ffffff;
+
+  --secondary: #1f2b45;
+  --secondary-hover: #26324a;
+  --secondary-foreground: #e7eef8;
+
+  --muted: #1f2b45;
+  --muted-foreground: #93a1b8;
+
+  --accent: #2b4c7b;
+  --accent-foreground: #e7eef8;
+
+  --destructive: #ef4444;
+  --destructive-hover: #dc2626;
+
+  --border: #28345000;
+  --separator: #30405b;
+  --input: #1f2b45;
+  --ring: #3b82f6;
+
+  --shadow-2xs: 0 1px 1px rgb(4 10 25 / 0.15);
+  --shadow-xs: 0 1px 2px rgb(4 10 25 / 0.19);
+  --shadow-sm: 0 1px 3px rgb(4 10 25 / 0.24), 0 1px 2px rgb(4 10 25 / 0.12);
+  --shadow-md: 0 3px 9px -2px rgb(4 10 25 / 0.31), 0 1px 3px rgb(4 10 25 / 0.16);
+  --shadow-lg: 0 7px 18px -4px rgb(4 10 25 / 0.40), 0 2px 6px -2px rgb(4 10 25 / 0.20);
+  --shadow-xl: 0 13px 29px -6px rgb(4 10 25 / 0.47), 0 4px 10px -3px rgb(4 10 25 / 0.24);
+  --shadow-2xl: 0 24px 48px -12px rgb(4 10 25 / 0.56);
+
+  --hover-bg: #1f2b45;
+  --hover-border: #283450;
+  --hover-text: #f3f7fc;
+
+  /* Semantic Action Colors */
+  --color-success: #34d399;
+  --color-success-light: rgba(52, 211, 153, 0.05);
+  --color-success-border: rgba(52, 211, 153, 0.15);
+  --color-success-text: #34d399;
+
+  --color-danger: #ef4444;
+  --color-danger-light: rgba(239, 68, 68, 0.05);
+  --color-danger-border: rgba(239, 68, 68, 0.15);
+  --color-danger-text: #fecdd3;
+
+  --color-warning: #facc15;
+  --color-warning-light: rgba(250, 204, 21, 0.05);
+  --color-warning-border: rgba(250, 204, 21, 0.15);
+  --color-warning-text: #fde68a;
+
+  --color-info: #6db3fc;
+  --color-info-light: rgba(109, 179, 252, 0.05);
+}

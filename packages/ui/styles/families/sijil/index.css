@@ -1,3 +1,4 @@
-/* Sijil design family: tokens + slot styles. */
+/* Shared Sijil tokens and UI family styles. */
+@import "@sijil/theme/sijil.css";
 @import "./tokens.css";
 @import "./base.css";

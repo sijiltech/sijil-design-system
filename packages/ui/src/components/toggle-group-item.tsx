@@ -1,6 +1,9 @@
+"use client";
+
 import * as React from "react";
 import type { VariantProps } from "class-variance-authority";
 import { cn } from "../lib/cn.js";
+import { groupSelectionClassName } from "../lib/group-variant.js";
 import { toggleVariants } from "./toggle.js";
 import { ToggleGroupContext } from "./toggle-group-context.js";
 
@@ -54,7 +57,7 @@ function ToggleGroupItem({
           variant: variant ?? context?.variant,
           size: size ?? context?.size,
         }),
-        isChecked && "bg-muted text-foreground font-semibold shadow-2xs",
+        isChecked && [groupSelectionClassName[context?.groupVariant ?? "card"], "font-semibold"],
         className
       )}
       {...props}

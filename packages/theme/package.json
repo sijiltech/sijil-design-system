@@ -1,0 +1,28 @@
+{
+  "name": "@sijil/theme",
+  "version": "0.2.0",
+  "description": "Shared CSS design tokens and Tailwind CSS v4 theme overrides.",
+  "license": "UNLICENSED",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "styles",
+    "README.md"
+  ],
+  "exports": {
+    "./theme.css": "./styles/theme.css",
+    "./sijil.css": "./styles/sijil.css",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "scripts": {
+    "prepublishOnly": "node ../../scripts/assert-private-registry.mjs"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^4"
+  }
+}

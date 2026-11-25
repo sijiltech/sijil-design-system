@@ -27,6 +27,8 @@ export interface ScreenHeaderProps extends React.HTMLAttributes<HTMLDivElement> 
    * Optional element rendered above the title (e.g. a mobile back link).
    */
   eyebrow?: React.ReactNode;
+  /** Page-level controls aligned to the inline end of the header. */
+  actions?: React.ReactNode;
 }
 
 /**
@@ -44,10 +46,11 @@ export function ScreenHeader({
   className,
   titleClassName,
   eyebrow,
+  actions,
   ...props
 }: ScreenHeaderProps) {
-  return (
-    <div className={cn("space-y-1.5 shell:space-y-1", className)} {...props}>
+  const titleContent = (
+    <>
       {eyebrow}
       <div className="flex items-center gap-2 shell:flex-wrap shell:gap-y-1">
         <h1
@@ -64,6 +67,17 @@ export function ScreenHeader({
         <p className="max-w-3xl text-sm text-muted-foreground">
           {description}
         </p>
+      )}
+    </>
+  );
+
+  return (
+    <div className={cn("space-y-1.5 shell:space-y-1", className)} {...props}>
+      {actions == null ? titleContent : (
+        <div className="flex flex-wrap items-start gap-3">
+          <div className="min-w-0 flex-[1_1_auto] space-y-1.5 shell:space-y-1">{titleContent}</div>
+          <div className="ms-auto flex min-w-0 flex-wrap items-center justify-end gap-2">{actions}</div>
+        </div>
       )}
     </div>
   );

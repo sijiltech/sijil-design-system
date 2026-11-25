@@ -4,7 +4,7 @@ import { cn } from "../lib/cn.js";
 /**
  * Properties for the {@link ScrollArea} component.
  */
-export interface ScrollAreaProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ScrollAreaProps extends React.ComponentProps<"div"> {
   /** Optional max height style or class. */
   maxHeight?: string | number;
 }
@@ -26,7 +26,7 @@ function ScrollArea({
     <div
       data-slot="scroll-area"
       className={cn(
-        "relative overflow-auto scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40",
+        "relative overflow-auto rounded-2xl scrollbar-thin scrollbar-thumb-muted-foreground/20 hover:scrollbar-thumb-muted-foreground/40",
         className
       )}
       style={{

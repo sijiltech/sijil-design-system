@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "../lib/cn.js";
 import { PaginationLink, type PaginationLinkProps } from "./pagination-link.js";
@@ -6,10 +5,11 @@ import { PaginationLink, type PaginationLinkProps } from "./pagination-link.js";
 /**
  * Properties for the {@link PaginationPrevious} component.
  */
-export interface PaginationPreviousProps extends PaginationLinkProps {
+export type PaginationPreviousProps = PaginationLinkProps & {
   /** Optional label override. Defaults to "Previous". */
   label?: string;
-}
+  iconOnly?: boolean;
+};
 
 /**
  * Previous page button link in {@link Pagination}.
@@ -20,6 +20,7 @@ export interface PaginationPreviousProps extends PaginationLinkProps {
 function PaginationPrevious({
   className,
   label = "Previous",
+  iconOnly = false,
   size = "default",
   ...props
 }: PaginationPreviousProps) {
@@ -31,7 +32,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeft className="size-4 rtl:rotate-180" aria-hidden="true" />
-      <span>{label}</span>
+      <span className={iconOnly ? "sr-only" : undefined}>{label}</span>
     </PaginationLink>
   );
 }

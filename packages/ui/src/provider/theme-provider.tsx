@@ -5,11 +5,24 @@ import * as React from "react";
 export type Theme = "light" | "dark" | "dark-blue" | "system";
 export type ResolvedTheme = "light" | "dark" | "dark-blue";
 
+export const NEXT_THEME = {
+  light: "dark",
+  dark: "dark-blue",
+  "dark-blue": "light",
+} satisfies Record<ResolvedTheme, ResolvedTheme>;
+
+export interface ThemeStorage {
+  read: () => Theme | null;
+  write: (theme: Theme) => void;
+  subscribe: (onChange: (theme: Theme | null) => void) => () => void;
+}
+
 export interface ThemeProviderProps {
   children: React.ReactNode;
   defaultTheme?: Theme;
   storageKey?: string;
   enableSystem?: boolean;
+  storage?: ThemeStorage;
 }
 
 export interface ThemeContextValue {
@@ -93,20 +106,11 @@ export function ThemeProvider({
   defaultTheme = "system",
   storageKey = "sijil-ui-theme",
   enableSystem = true,
+  storage,
 }: ThemeProviderProps) {
-  const [theme, setThemeState] = React.useState<Theme>(() => {
-    if (typeof window === "undefined") return defaultTheme;
-    try {
-      const stored = window.localStorage.getItem(storageKey);
-      if (stored && isTheme(stored)) return stored;
-    } catch {
-      // ignore localStorage errors
-    }
-    return defaultTheme;
-  });
-
-  const [resolvedTheme, setResolvedTheme] = React.useState<ResolvedTheme>(() =>
-    resolveTheme(defaultTheme),
+  const [theme, setThemeState] = React.useState<Theme>(defaultTheme);
+  const [resolvedTheme, setResolvedTheme] = React.useState<ResolvedTheme>(
+    defaultTheme === "system" ? "light" : defaultTheme,
   );
 
   const applyTheme = React.useCallback(
@@ -132,40 +136,45 @@ export function ThemeProvider({
   const setTheme = React.useCallback(
     (newTheme: Theme) => {
       try {
-        window.localStorage.setItem(storageKey, newTheme);
+        if (storage) storage.write(newTheme);
+        else window.localStorage.setItem(storageKey, newTheme);
       } catch {
         // ignore
       }
       setThemeState(newTheme);
       applyTheme(newTheme);
     },
-    [applyTheme, storageKey],
+    [applyTheme, storage, storageKey],
   );
 
   const toggleTheme = React.useCallback(() => {
-    const cycle: Record<ResolvedTheme, ResolvedTheme> = {
-      light: "dark",
-      dark: "dark-blue",
-      "dark-blue": "light",
-    };
-    const next = cycle[resolvedTheme] || "light";
-    setTheme(next);
+    setTheme(NEXT_THEME[resolvedTheme]);
   }, [resolvedTheme, setTheme]);
 
-  // Initial client sync & storage listener
   React.useEffect(() => {
+    const syncTheme = (stored: Theme | null) => {
+      const next = stored ?? defaultTheme;
+      setThemeState(next);
+      applyTheme(next);
+    };
+
     try {
-      const stored = window.localStorage.getItem(storageKey);
-      if (stored && isTheme(stored)) {
-        setThemeState(stored);
-        applyTheme(stored);
-      } else {
-        applyTheme(theme);
-      }
+      const stored = storage ? storage.read() : window.localStorage.getItem(storageKey);
+      syncTheme(isTheme(stored) ? stored : null);
     } catch {
-      applyTheme(theme);
+      syncTheme(null);
     }
-  }, [applyTheme, storageKey, theme]);
+
+    if (storage) return storage.subscribe(syncTheme);
+
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === storageKey || event.key === null) {
+        syncTheme(isTheme(event.newValue) ? event.newValue : null);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+  }, [applyTheme, defaultTheme, storage, storageKey]);
 
   // System theme changes
   React.useEffect(() => {

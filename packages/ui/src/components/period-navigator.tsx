@@ -1,12 +1,15 @@
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "../lib/cn.js";
+import { groupCardClassName, groupSurfaceClassName, type GroupVariant } from "../lib/group-variant.js";
 import { Popover, PopoverTrigger, PopoverContent } from "./popover.js";
 
 /**
  * Properties for the {@link PeriodNavigator} component.
  */
 export interface PeriodNavigatorProps extends React.HTMLAttributes<HTMLDivElement> {
+  /** Surface treatment. Defaults to a raised surface. */
+  variant?: GroupVariant | "surface";
   /** The text string representing the active period (e.g. "November 2026"). */
   periodLabel: string;
   /** Action handler invoked when previous button is clicked. */
@@ -21,6 +24,10 @@ export interface PeriodNavigatorProps extends React.HTMLAttributes<HTMLDivElemen
   nextDisabled?: boolean;
   /** Optional interactive popover content (e.g. date picker) rendered on label click. */
   popoverContent?: React.ReactNode;
+  popoverAlign?: React.ComponentProps<typeof PopoverContent>["align"];
+  /** Optional controlled state for closing the popover after selection. */
+  popoverOpen?: boolean;
+  onPopoverOpenChange?: (open: boolean) => void;
   /** Optional direct click handler for the period label if not using popover content. */
   onLabelClick?: () => void;
   /** Accessible label for the previous button. Defaults to "Previous". */
@@ -43,23 +50,31 @@ function PeriodNavigator({
   prevDisabled = false,
   nextDisabled = false,
   popoverContent,
+  popoverAlign = "center",
+  popoverOpen,
+  onPopoverOpenChange,
   onLabelClick,
   ariaLabelPrev = "Previous",
   ariaLabelNext = "Next",
   className,
+  variant = "surface",
   ...props
 }: PeriodNavigatorProps) {
   const iconBtnClass =
-    "inline-flex my-auto size-8 shell:size-9 items-center justify-center rounded-md bg-card text-muted-foreground transition-colors hover:bg-muted cursor-pointer disabled:pointer-events-none disabled:opacity-40";
+    "inline-flex my-auto size-8 shell:size-9 items-center justify-center bg-card text-muted-foreground transition-colors cursor-pointer disabled:pointer-events-none";
 
   const labelBtnClass =
-    "inline-flex h-8 my-auto min-w-[118px] cursor-pointer items-center justify-center gap-1.5 rounded-md px-2.5 text-sm font-medium text-foreground tabular-nums transition-colors hover:bg-muted shell:h-9 shell:flex-1";
+    "inline-flex h-8 my-auto min-w-[118px] cursor-pointer items-center justify-center gap-1.5 px-2.5 text-sm font-medium text-foreground tabular-nums transition-colors shell:h-9 shell:flex-1";
+
+  const onSurface = variant === "surface";
+  const controlClassName = onSurface ? "rounded-md hover:bg-muted" : "rounded-xl hover:surface-tint hover:text-hover-text";
+  const arrowClassName = cn(iconBtnClass, controlClassName, onSurface ? "disabled:opacity-50" : "disabled:opacity-40");
 
   const renderLabelTrigger = () => (
     <button
       type="button"
       onClick={onLabelClick}
-      className={labelBtnClass}
+      className={cn(labelBtnClass, controlClassName, !onSurface && "bg-card")}
       aria-label={periodLabel}
     >
       {icon && <span className="shrink-0 flex items-center" aria-hidden="true">{icon}</span>}
@@ -70,15 +85,18 @@ function PeriodNavigator({
   return (
     <div
       data-slot="period-navigator"
+      data-variant={variant}
       className={cn(
-        "inline-flex items-center bg-card shadow-sm rounded-xl p-1 shell:w-full shell:items-center select-none border border-border/50",
+        "inline-flex items-center gap-1 shell:w-full shell:items-center select-none",
+        variant === "card" && groupCardClassName,
+        onSurface && [groupSurfaceClassName, "gap-0"],
         className
       )}
       {...props}
     >
       <button
         type="button"
-        className={iconBtnClass}
+        className={arrowClassName}
         aria-label={ariaLabelPrev}
         onClick={onPrev}
         disabled={prevDisabled}
@@ -87,9 +105,9 @@ function PeriodNavigator({
       </button>
 
       {popoverContent ? (
-        <Popover>
+        <Popover open={popoverOpen} onOpenChange={onPopoverOpenChange}>
           <PopoverTrigger asChild>{renderLabelTrigger()}</PopoverTrigger>
-          <PopoverContent align="center" className="w-auto p-0">
+          <PopoverContent align={popoverAlign} className="w-auto p-0">
             {popoverContent}
           </PopoverContent>
         </Popover>
@@ -99,7 +117,7 @@ function PeriodNavigator({
 
       <button
         type="button"
-        className={iconBtnClass}
+        className={arrowClassName}
         aria-label={ariaLabelNext}
         onClick={onNext}
         disabled={nextDisabled}

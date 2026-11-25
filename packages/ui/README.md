@@ -67,6 +67,22 @@ bun add @tanstack/react-table
 
 ---
 
+## Accordion variants
+
+`<Accordion variant="plain">` leaves the items on the surrounding surface and is the default. Use `variant="card"` to give each item its own rounded card. Both variants support the same single- and multiple-item behavior.
+
+## Group variants
+
+Use `variant="plain"` for a group on the surrounding surface or `variant="card"` for a rounded tray. Current defaults follow each component’s existing presentation. CollapsibleCard defaults to card and its plain variant keeps the heading and content on the surrounding surface. Set the surface on `Tabs` and use `TabsList variant="line"` with `TabsTrigger variant="line"` for the line layout. On `ToggleGroup`, pass `itemVariant="outline"` to combine outlined items with either group surface.
+
+## Sidebar logo
+
+Pass the application’s image URL as `brand.logoSrc` or a React icon as `brand.logoIcon` on `SidebarBrand` / `TeamSwitcher`. The logo swaps to the sidebar toggle on hover and keyboard focus. The toggle icon is visible when the brand has no available logo.
+
+## Corner radius
+
+Use Tailwind’s `rounded-lg` for compact surfaces, `rounded-xl` for controls and menus, and `rounded-2xl` for cards, dialogs and grouped controls. Round the exposed edges of docked surfaces. Circular avatars, radio buttons and switches use `rounded-full`.
+
 ## Quick Start
 
 ### 1. Import Styles
@@ -78,6 +94,8 @@ In your application's global CSS file (e.g. `src/app/globals.css`):
 @import "@sijil/ui/theme.css";
 @import "@sijil/ui/families/sijil.css";
 ```
+
+These CSS entry points load the shared `@sijil/theme` tokens through the UI package dependency. For Tailwind projects that only need the tokens, see the [theme package](../theme/README.md).
 
 ### 2. Configure HTML Attributes
 
@@ -280,4 +298,3 @@ Consuming projects customize the design system without modifying library source 
 - Versioning is automated using **Changesets** (`bun run changeset`, `bun run version-packages`).
 - Release builds run `tsc -p tsconfig.build.json` and publish restricted packages.
 - A built-in guard (`scripts/assert-private-registry.mjs`) automatically halts publication if an attempt is made to publish to the public npm registry.
-

@@ -33,14 +33,16 @@ describe("Button component", () => {
     const { rerender } = render(<Button variant="destructive">Destructive</Button>);
     expect(screen.getByRole("button")).toHaveClass("bg-destructive");
 
+    expect(screen.getByRole("button")).not.toHaveClass("btn-shimmer");
+
     rerender(<Button variant="outline">Outline</Button>);
-    expect(screen.getByRole("button")).toHaveClass("bg-background");
+    expect(screen.getByRole("button")).toHaveClass("bg-card", "hover:surface-tint");
 
     rerender(<Button variant="secondary">Secondary</Button>);
     expect(screen.getByRole("button")).toHaveClass("bg-secondary");
 
     rerender(<Button variant="ghost">Ghost</Button>);
-    expect(screen.getByRole("button")).toHaveClass("hover:bg-muted");
+    expect(screen.getByRole("button")).toHaveClass("hover:surface-tint");
   });
 
   it("supports polymorphic rendering via asChild", () => {

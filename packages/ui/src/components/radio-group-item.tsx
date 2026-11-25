@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { Circle } from "lucide-react";
 import { cn } from "../lib/cn.js";
@@ -41,12 +43,12 @@ function RadioGroupItem({
         }
       }}
       className={cn(
-        "aspect-square size-4 shrink-0 rounded-full border border-input shadow-xs transition-[color,box-shadow] outline-none",
-        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aspect-square size-4 shrink-0 rounded-full transition-colors hover:surface-tint outline-none",
+        "focus-visible:ring-ring/50 focus-visible:ring-[3px]",
         "disabled:cursor-not-allowed disabled:opacity-50",
         isChecked
-          ? "border-primary bg-primary text-primary-foreground"
-          : "bg-transparent text-transparent",
+          ? "bg-primary text-primary-foreground"
+          : "bg-input text-transparent",
         className
       )}
       {...props}

@@ -20,7 +20,7 @@ export function EmptyState({
     <div
       data-slot="empty-state"
       className={cn(
-        "flex flex-col items-center justify-center text-center p-8 rounded-xl border border-dashed border-input/80 bg-card/45 backdrop-blur-xs min-h-[200px] transition-all duration-300 hover:border-input/100 hover:bg-card/70 animate-[card-enter_0.5s_ease-out]",
+        "flex flex-col items-center justify-center text-center p-8 rounded-2xl bg-card backdrop-blur-xs min-h-[200px] transition-all duration-300  animate-[card-enter_0.5s_ease-out]",
         className
       )}
       {...props}

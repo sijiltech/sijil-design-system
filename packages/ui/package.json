@@ -1,10 +1,12 @@
 {
   "name": "@sijil/ui",
-  "version": "0.1.2",
-  "description": "Sijil private design system: headless-based React components, design tokens and design families.",
+  "version": "0.2.0",
+  "description": "Sijil private design system: headless-based React components and their design family styles.",
   "license": "UNLICENSED",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist",
     "styles",
@@ -62,9 +64,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check:package": "publint --strict && attw --pack . --profile esm-only --exclude-entrypoints ./theme.css ./families/sijil.css",
-    "prepublishOnly": "node scripts/assert-private-registry.mjs && bun run build"
+    "prepublishOnly": "node ../../scripts/assert-private-registry.mjs && bun run build"
   },
   "dependencies": {
+    "@sijil/theme": "^0.2.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -115,6 +118,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.5",
+    "@tailwindcss/node": "^4",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.9",

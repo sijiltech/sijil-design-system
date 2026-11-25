@@ -16,6 +16,7 @@
     "@storybook/addon-a11y": "^8.6.4",
     "@storybook/addon-essentials": "^8.6.4",
     "@storybook/addon-interactions": "^8.6.4",
+    "@storybook/preview-api": "8.6.19",
     "@storybook/react": "^8.6.4",
     "@storybook/react-vite": "^8.6.4",
     "@tailwindcss/vite": "^4.0.0",

@@ -11,6 +11,8 @@ export interface MobileSettingsRowProps {
   onClick?: () => void;
   tone?: "default" | "destructive";
   badge?: React.ReactNode;
+  /** A preference control rendered below the label in a noninteractive row. */
+  control?: React.ReactNode;
   className?: string;
   renderLink?: (props: {
     href: string;
@@ -29,12 +31,13 @@ export function MobileSettingsRow({
   onClick,
   tone = "default",
   badge,
+  control,
   className,
   renderLink,
 }: MobileSettingsRowProps) {
   const destructive = tone === "destructive";
   const rowClasses = cn(
-    "flex w-full min-h-14 items-center gap-3 px-4 py-3 text-start transition-colors active:bg-hover-bg select-none cursor-pointer border-b border-border/40 last:border-b-0",
+    "flex w-full min-h-14 items-center gap-3 px-4 py-3 text-start rounded-xl bg-card transition-colors hover:surface-tint active:surface-tint select-none cursor-pointer",
     className,
   );
 
@@ -67,6 +70,15 @@ export function MobileSettingsRow({
       )}
     </>
   );
+
+  if (control != null) {
+    return (
+      <div className={cn("flex flex-col gap-2.5 px-4 py-3.5", className)}>
+        <div className="flex items-center gap-3">{inner}</div>
+        {control}
+      </div>
+    );
+  }
 
   if (href && renderLink) {
     return renderLink({ href, className: rowClasses, children: inner });
@@ -103,7 +115,7 @@ export function MobileSettingsSection({
           {title}
         </div>
       )}
-      <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-xs">
+      <div className="grid gap-1 rounded-2xl bg-foreground/5 p-1">
         {children}
       </div>
     </div>

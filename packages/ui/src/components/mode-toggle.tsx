@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Moon, Palette, Sun } from "lucide-react";
-import { useTheme, type ResolvedTheme } from "../provider/theme-provider.js";
+import { NEXT_THEME, useTheme, type ResolvedTheme } from "../provider/theme-provider.js";
 import { Button, type ButtonProps } from "./button.js";
 import { cn } from "../lib/cn.js";
 
@@ -36,12 +36,7 @@ export function ModeToggle({
   const { resolvedTheme, toggleTheme } = useTheme();
   const activeTheme = propTheme ?? resolvedTheme;
 
-  const nextTheme: ResolvedTheme =
-    activeTheme === "light"
-      ? "dark"
-      : activeTheme === "dark"
-        ? "dark-blue"
-        : "light";
+  const nextTheme = NEXT_THEME[activeTheme];
 
   const defaultLabels = {
     light: "Light",
@@ -64,10 +59,11 @@ export function ModeToggle({
       variant={variant}
       size={size}
       onClick={handleToggle}
-      className={cn("relative shadow-xs cursor-pointer select-none", className)}
+      className={cn("relative cursor-pointer select-none", className)}
       aria-label={defaultLabels[nextTheme] || defaultLabels.toggle}
       title={defaultLabels[nextTheme] || defaultLabels.toggle}
       {...props}
+      data-next-theme={nextTheme}
     >
       {nextTheme === "dark" && (
         <Moon className="size-4 shrink-0 transition-transform duration-200" />

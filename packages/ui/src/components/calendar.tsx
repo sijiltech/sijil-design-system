@@ -45,7 +45,7 @@ function Calendar({
       dir={direction}
       numerals={numerals}
       className={cn(
-        "bg-background group/calendar p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
+        "bg-background group/calendar rounded-2xl p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent",
         className
       )}
       captionLayout={captionLayout}
@@ -83,7 +83,7 @@ function Calendar({
           defaultClassNames.dropdowns
         ),
         dropdown_root: cn(
-          "relative has-focus:border-ring border border-input shadow-xs has-focus:ring-ring/50 has-focus:ring-[3px] rounded-md",
+          "relative bg-input has-focus:ring-ring/50 has-focus:ring-[3px] rounded-xl",
           defaultClassNames.dropdown_root
         ),
         dropdown: cn(
@@ -94,13 +94,13 @@ function Calendar({
           "select-none font-medium",
           captionLayout === "label"
             ? "text-sm"
-            : "rounded-md ltr:pl-2 ltr:pr-1 rtl:pr-2 rtl:pl-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
+            : "rounded-xl ltr:pl-2 ltr:pr-1 rtl:pr-2 rtl:pl-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-muted-foreground [&>svg]:size-3.5",
           defaultClassNames.caption_label
         ),
         table: "w-full border-collapse",
         weekdays: cn("flex", defaultClassNames.weekdays),
         weekday: cn(
-          "text-muted-foreground rounded-md flex-1 font-normal text-[0.8rem] select-none",
+          "text-muted-foreground flex-1 font-normal text-[0.8rem] select-none",
           defaultClassNames.weekday
         ),
         week: cn("flex w-full mt-2", defaultClassNames.week),
@@ -113,11 +113,11 @@ function Calendar({
           defaultClassNames.week_number
         ),
         day: cn(
-          "relative w-full h-full p-0 text-center ltr:[&:first-child[data-selected=true]_button]:rounded-l-md ltr:[&:last-child[data-selected=true]_button]:rounded-r-md rtl:[&:first-child[data-selected=true]_button]:rounded-r-md rtl:[&:last-child[data-selected=true]_button]:rounded-l-md group/day aspect-square select-none",
+          "relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-s-xl [&:last-child[data-selected=true]_button]:rounded-e-xl group/day aspect-square select-none",
           defaultClassNames.day
         ),
         range_start: cn(
-          "ltr:rounded-l-md rtl:rounded-r-md bg-primary/10 dark:bg-ring/40",
+          "rounded-s-xl bg-primary/10 dark:bg-ring/40",
           defaultClassNames.range_start
         ),
         range_middle: cn(
@@ -125,11 +125,11 @@ function Calendar({
           defaultClassNames.range_middle
         ),
         range_end: cn(
-          "ltr:rounded-r-md rtl:rounded-l-md bg-primary/10 dark:bg-ring/40",
+          "rounded-e-xl bg-primary/10 dark:bg-ring/40",
           defaultClassNames.range_end
         ),
         today: cn(
-          "bg-primary/10 text-foreground dark:bg-accent dark:text-accent-foreground rounded-md data-[selected=true]:rounded-none",
+          "bg-primary/10 text-foreground dark:bg-accent dark:text-accent-foreground rounded-xl data-[selected=true]:rounded-none",
           defaultClassNames.today
         ),
         outside: cn(
@@ -222,33 +222,33 @@ function CalendarDayButton({
       className={cn(
         // Manual size reset (replaces what size="icon" would have added)
         "h-auto px-0 py-0",
-        // Selected / range — light: dark text on soft tint; dark modes: white text
+        // Selected / range — light: soft tint; dark modes: primary surface and matching text
         "data-[selected-single=true]:bg-primary/15 data-[selected-single=true]:text-foreground",
         "data-[selected-single=true]:hover:bg-primary/15 data-[selected-single=true]:hover:text-foreground",
-        "dark:data-[selected-single=true]:bg-ring dark:data-[selected-single=true]:text-white",
-        "dark:data-[selected-single=true]:hover:bg-ring dark:data-[selected-single=true]:hover:text-white",
+        "dark:data-[selected-single=true]:bg-primary dark:data-[selected-single=true]:text-primary-foreground",
+        "dark:data-[selected-single=true]:hover:bg-primary dark:data-[selected-single=true]:hover:text-primary-foreground",
         "data-[range-start=true]:bg-primary/15 data-[range-start=true]:text-foreground",
         "data-[range-start=true]:hover:bg-primary/15 data-[range-start=true]:hover:text-foreground",
-        "dark:data-[range-start=true]:bg-ring dark:data-[range-start=true]:text-white",
-        "dark:data-[range-start=true]:hover:bg-ring dark:data-[range-start=true]:hover:text-white",
+        "dark:data-[range-start=true]:bg-primary dark:data-[range-start=true]:text-primary-foreground",
+        "dark:data-[range-start=true]:hover:bg-primary dark:data-[range-start=true]:hover:text-primary-foreground",
         "data-[range-end=true]:bg-primary/15 data-[range-end=true]:text-foreground",
         "data-[range-end=true]:hover:bg-primary/15 data-[range-end=true]:hover:text-foreground",
-        "dark:data-[range-end=true]:bg-ring dark:data-[range-end=true]:text-white",
-        "dark:data-[range-end=true]:hover:bg-ring dark:data-[range-end=true]:hover:text-white",
+        "dark:data-[range-end=true]:bg-primary dark:data-[range-end=true]:text-primary-foreground",
+        "dark:data-[range-end=true]:hover:bg-primary dark:data-[range-end=true]:hover:text-primary-foreground",
         "data-[range-middle=true]:bg-primary/10 data-[range-middle=true]:text-foreground",
         "data-[range-middle=true]:hover:bg-primary/10 data-[range-middle=true]:hover:text-foreground",
         "dark:data-[range-middle=true]:bg-ring/30 dark:data-[range-middle=true]:text-white",
         "dark:data-[range-middle=true]:hover:bg-ring/30 dark:data-[range-middle=true]:hover:text-white",
         // Focus ring + hover
-        "group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50",
+        "group-data-[focused=true]/day:ring-ring/50",
         "hover:bg-secondary-hover hover:text-secondary-foreground",
         // Layout
         "flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal",
         "group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px]",
-        // Range rounding
-        "data-[range-end=true]:rounded-md ltr:data-[range-end=true]:rounded-r-md rtl:data-[range-end=true]:rounded-l-md",
+        // Keep the inner edge of a continuous range square.
+        "data-[range-end=true]:rounded-s-none data-[range-end=true]:rounded-e-xl",
         "data-[range-middle=true]:rounded-none",
-        "data-[range-start=true]:rounded-md ltr:data-[range-start=true]:rounded-l-md rtl:data-[range-start=true]:rounded-r-md",
+        "data-[range-start=true]:rounded-e-none data-[range-start=true]:rounded-s-xl",
         "[&>span]:text-sm [&>span]:opacity-70",
         defaultClassNames.day,
         className

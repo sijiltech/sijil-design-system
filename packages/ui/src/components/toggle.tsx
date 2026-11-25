@@ -1,15 +1,16 @@
+"use client";
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "../lib/cn.js";
 
 const toggleVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 transition-all duration-150 cursor-pointer select-none",
+  "inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium hover:surface-tint hover:text-hover-text focus-visible:ring-ring/50 focus-visible:ring-[3px] outline-none disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 transition-all duration-150 cursor-pointer select-none",
   {
     variants: {
       variant: {
         default: "bg-transparent",
-        outline:
-          "border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground",
+        outline: "bg-foreground/5 text-foreground",
       },
       size: {
         default: "h-9 px-3 min-w-9",
@@ -74,7 +75,7 @@ function Toggle({
       onClick={handleClick}
       className={cn(
         toggleVariants({ variant, size }),
-        isPressed && "bg-muted text-foreground font-semibold shadow-2xs",
+        isPressed && "bg-card text-card-foreground font-semibold",
         className
       )}
       {...props}

@@ -5,21 +5,41 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion"
 import { ChevronDown } from "lucide-react"
 
 import { cn } from "../lib/cn.js"
+import type { GroupVariant } from "../lib/group-variant.js"
+
+export type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root> & {
+  variant?: GroupVariant
+}
+
+const AccordionVariantContext = React.createContext<GroupVariant>("plain")
 
 function Accordion({
+  className,
+  variant = "plain",
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Root>) {
-  return <AccordionPrimitive.Root data-slot="accordion" {...props} />
+}: AccordionProps) {
+  return (
+    <AccordionVariantContext.Provider value={variant}>
+      <AccordionPrimitive.Root
+        data-slot="accordion"
+        data-variant={variant}
+        className={cn(variant === "card" && "space-y-2", className)}
+        {...props}
+      />
+    </AccordionVariantContext.Provider>
+  )
 }
 
 function AccordionItem({
   className,
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Item>) {
+  const variant = React.useContext(AccordionVariantContext)
+
   return (
     <AccordionPrimitive.Item
       data-slot="accordion-item"
-      className={cn("", className)}
+      className={cn(variant === "card" && "rounded-2xl bg-card px-2 text-card-foreground", className)}
       {...props}
     />
   )
@@ -35,7 +55,7 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "flex flex-1 items-center justify-between py-4 px-2 text-sm font-medium rounded-lg cursor-pointer text-start [&[data-state=open]>svg]:rotate-180",
+          "flex flex-1 items-center justify-between py-4 px-2 text-sm font-medium rounded-xl cursor-pointer text-start [&[data-state=open]>svg]:rotate-180",
           className,
         )}
         {...props}
@@ -52,13 +72,15 @@ function AccordionContent({
   children,
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Content>) {
+  const variant = React.useContext(AccordionVariantContext)
+
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
       className="overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down "
       {...props}
     >
-      <div className={cn("pb-4 pt-0 border-t-1 border-muted", className)}>{children}</div>
+      <div className={cn("pb-4 pt-0", variant === "card" && "px-2", className)}>{children}</div>
     </AccordionPrimitive.Content>
   )
 }

@@ -25,7 +25,7 @@ export const Switcher: StoryObj = {
           selectedTab={selected}
           action={(val) => setSelected(String(val))}
         />
-        <div className="p-4 rounded-xl bg-card border border-border text-sm">
+        <div className="p-4 rounded-2xl bg-card text-sm">
           Active tab: <span className="font-semibold">{selected}</span>
         </div>
       </div>

@@ -1,11 +1,15 @@
+"use client";
+
 import * as React from "react";
 import { cn } from "../lib/cn.js";
+import { groupCardClassName, type GroupVariant } from "../lib/group-variant.js";
 import { RadioGroupContext } from "./radio-group-context.js";
 
 /**
  * Properties for the {@link RadioGroup} component.
  */
 export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange"> {
+  variant?: GroupVariant;
   /** The controlled value of the selected radio item. */
   value?: string;
   /** The default uncontrolled value of the radio group. */
@@ -26,6 +30,7 @@ export interface RadioGroupProps extends Omit<React.HTMLAttributes<HTMLDivElemen
  */
 function RadioGroup({
   className,
+  variant = "plain",
   value: controlledValue,
   defaultValue,
   onValueChange,
@@ -62,8 +67,9 @@ function RadioGroup({
     <RadioGroupContext.Provider value={contextValue}>
       <div
         data-slot="radio-group"
+        data-variant={variant}
         role="radiogroup"
-        className={cn("grid gap-2", className)}
+        className={cn("grid gap-2", variant === "card" && groupCardClassName, className)}
         {...props}
       >
         {children}
