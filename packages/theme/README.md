@@ -8,7 +8,7 @@ CSS design tokens for projects using Tailwind CSS v4. The theme configures Tailw
 @import "@sijil/theme/sijil.css";
 ```
 
-`theme.css` registers the tokens with Tailwind. `sijil.css` sets the Sijil color palette, Cairo font stack, 18px root size and base radius. Add `dark` for the monochrome palette or `dark-blue` for the blue palette. Load Cairo in the app (for example `next/font` with `variable: "--font-cairo"`) so `--font-cairo` resolves to the actual font files.
+`theme.css` registers the tokens with Tailwind. `sijil.css` sets the Sijil color palette, Cairo font stack, 18px root size and base radius. Add `dark` for the monochrome palette or `dark-blue` for the blue palette. The theme ships the Cairo latin and arabic subsets and registers them as `"Cairo"`. An app can still set `--font-cairo` (for example with `next/font`) to override that family.
 
 Projects with their own palette can import `theme.css` and define their semantic colors in their own CSS. Override Tailwind defaults such as `--font-sans`, `--radius-md`, or `--default-transition-duration` in a later `@theme` block.
 

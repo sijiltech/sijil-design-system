@@ -1,3 +1,5 @@
+@import "./cairo.css";
+
 /* Shared Sijil palette and typography for light, dark and dark-blue. */
 :root {
   --ds-font-sans: var(--font-cairo, "Cairo", ui-sans-serif, system-ui, sans-serif);

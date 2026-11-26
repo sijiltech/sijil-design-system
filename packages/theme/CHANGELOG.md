@@ -1,5 +1,11 @@
 # @sijil/theme
 
+## 0.2.2
+
+### Patch Changes
+
+- Ship the Cairo latin and arabic subsets with the Sijil theme.
+
 ## 0.2.1
 
 ### Patch Changes
