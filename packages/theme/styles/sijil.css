@@ -1,6 +1,8 @@
 /* Shared Sijil palette and typography for light, dark and dark-blue. */
 :root {
-  --ds-font-sans: var(--font-roboto, "Roboto", ui-sans-serif, system-ui, sans-serif);
+  --ds-font-sans: var(--font-cairo, "Cairo", ui-sans-serif, system-ui, sans-serif);
+  --ds-font-size: 18px;
+  font-size: var(--ds-font-size);
 
   --radius: 0.35rem;
 

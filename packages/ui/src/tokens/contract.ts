@@ -83,6 +83,7 @@ export const STRUCTURAL_TOKENS = [
   "control-h-md",
   "control-h-lg",
   "ds-font-sans",
+  "ds-font-size",
 ] as const;
 
 /** Tokens that must be defined by each *theme* (light/dark variants). */

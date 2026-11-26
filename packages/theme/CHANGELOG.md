@@ -1,5 +1,11 @@
 # @sijil/theme
 
+## 0.2.1
+
+### Patch Changes
+
+- Set Cairo and an 18px root size as the Sijil defaults.
+
 ## 0.2.0
 
 ### Minor Changes

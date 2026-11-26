@@ -1,6 +1,6 @@
 {
   "name": "@sijil/theme",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shared CSS design tokens and Tailwind CSS v4 theme overrides.",
   "license": "UNLICENSED",
   "type": "module",

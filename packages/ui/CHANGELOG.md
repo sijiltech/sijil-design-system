@@ -1,5 +1,13 @@
 # @sijil/ui
 
+## 0.2.1
+
+### Patch Changes
+
+- Set Cairo and an 18px root size as the Sijil defaults. Make the app header background transparent with no shadow.
+- Updated dependencies
+  - @sijil/theme@0.2.1
+
 ## 0.2.0
 
 ### Minor Changes
