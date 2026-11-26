@@ -11,9 +11,12 @@ import {
 import { cn } from "../lib/cn.js";
 import type { GroupVariant } from "../lib/group-variant.js";
 
+/** `card` tints the trigger. `flat` keeps that trigger on the card surface. `plain` drops the card. */
+export type CollapsibleCardVariant = GroupVariant | "flat";
+
 export interface CollapsibleCardProps {
   /** Surface around the header and content. Defaults to card. */
-  variant?: GroupVariant;
+  variant?: CollapsibleCardVariant;
   title: React.ReactNode;
   description?: React.ReactNode;
   badge?: React.ReactNode;
@@ -47,6 +50,8 @@ export function CollapsibleCard({
 }: CollapsibleCardProps) {
   const [uncontrolledOpen, setUncontrolledOpen] = React.useState(defaultOpen);
   const isOpen = propOpen ?? uncontrolledOpen;
+  const hasCard = variant !== "plain";
+  const tintTrigger = variant === "card";
   const titleId = React.useId();
   const descriptionId = React.useId();
 
@@ -65,17 +70,17 @@ export function CollapsibleCard({
       className={cn("w-full", className)}
     >
       <Card
-        data-slot={variant === "card" ? "card" : "collapsible-card-surface"}
+        data-slot={hasCard ? "card" : "collapsible-card-surface"}
         className={cn(
           "gap-3 overflow-hidden",
-          variant === "card" ? "p-1" : "rounded-none bg-transparent p-0 text-foreground shadow-none",
+          hasCard ? "p-1" : "rounded-none bg-transparent p-0 text-foreground shadow-none",
         )}
       >
         <div
           data-slot="collapsible-card-header"
           className={cn(
             "relative isolate flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl px-3 py-2.5 select-none",
-            variant === "card" && "bg-foreground/5",
+            tintTrigger && "bg-foreground/5",
             headerClassName,
           )}
         >
@@ -85,7 +90,12 @@ export function CollapsibleCard({
             aria-describedby={description ? descriptionId : undefined}
             className="flex min-w-0 flex-1 cursor-pointer items-center gap-2.5 text-start after:absolute after:inset-0 after:rounded-xl hover:after:surface-tint focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-ring"
           >
-            <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-card text-muted-foreground">
+            <span
+              className={cn(
+                "flex size-7 shrink-0 items-center justify-center rounded-xl text-muted-foreground",
+                variant === "flat" ? "bg-foreground/5" : "bg-card",
+              )}
+            >
               <ChevronDown
                 aria-hidden="true"
                 className={cn(

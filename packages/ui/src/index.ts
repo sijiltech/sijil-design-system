@@ -257,6 +257,7 @@ export {
 export {
   CollapsibleCard,
   type CollapsibleCardProps,
+  type CollapsibleCardVariant,
 } from "./components/collapsible-card.js";
 export {
   NavMain,

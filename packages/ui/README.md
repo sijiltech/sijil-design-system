@@ -73,7 +73,7 @@ bun add @tanstack/react-table
 
 ## Group variants
 
-Use `variant="plain"` for a group on the surrounding surface or `variant="card"` for a rounded tray. Current defaults follow each component’s existing presentation. CollapsibleCard defaults to card and its plain variant keeps the heading and content on the surrounding surface. Set the surface on `Tabs` and use `TabsList variant="line"` with `TabsTrigger variant="line"` for the line layout. On `ToggleGroup`, pass `itemVariant="outline"` to combine outlined items with either group surface.
+Use `variant="plain"` for a group on the surrounding surface or `variant="card"` for a rounded tray. Current defaults follow each component’s existing presentation. CollapsibleCard defaults to card, which tints the trigger. `variant="flat"` keeps the card and leaves the trigger on the same background. Its plain variant keeps the heading and content on the surrounding surface. Set the surface on `Tabs` and use `TabsList variant="line"` with `TabsTrigger variant="line"` for the line layout. On `ToggleGroup`, pass `itemVariant="outline"` to combine outlined items with either group surface.
 
 ## Sidebar logo
 

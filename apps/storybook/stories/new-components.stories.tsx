@@ -25,6 +25,7 @@ import {
   TableCell,
   TableBody,
   Button,
+  type CollapsibleCardVariant,
   type GroupVariant,
 } from "@sijil/ui";
 import {
@@ -255,7 +256,7 @@ const departmentOptions = [
 ];
 
 type GroupExampleArgs = {
-  collapsibleVariant: GroupVariant;
+  collapsibleVariant: CollapsibleCardVariant;
   buttonGroupVariant: GroupVariant;
 };
 
@@ -263,7 +264,7 @@ export const CollapsibleAndGroups: StoryObj<GroupExampleArgs> = {
   name: "Collapsible and Groups (Card)",
   args: { collapsibleVariant: "card", buttonGroupVariant: "card" },
   argTypes: {
-    collapsibleVariant: { name: "Collapsible variant", control: "inline-radio", options: ["plain", "card"] },
+    collapsibleVariant: { name: "Collapsible variant", control: "inline-radio", options: ["plain", "card", "flat"] },
     buttonGroupVariant: { name: "Button Group variant", control: "inline-radio", options: ["plain", "card"] },
   },
   render: ({ collapsibleVariant, buttonGroupVariant }) => (

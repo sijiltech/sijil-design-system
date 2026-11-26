@@ -1,5 +1,11 @@
 # @sijil/ui
 
+## 0.2.3
+
+### Patch Changes
+
+- Add a flat CollapsibleCard variant that keeps the card surface and leaves the trigger on the same background.
+
 ## 0.2.2
 
 ### Patch Changes

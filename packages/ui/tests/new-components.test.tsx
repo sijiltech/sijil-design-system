@@ -302,6 +302,16 @@ describe("Collapsible & Group Controls", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "true");
   });
 
+  it("keeps a flat collapsible card on the card surface without tinting the trigger", () => {
+    const { container } = render(
+      <CollapsibleCard title="Leave balance" variant="flat">21 days remaining</CollapsibleCard>,
+    );
+
+    expect(container.querySelector('[data-slot="card"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-variant="flat"]')).toBeInTheDocument();
+    expect(container.querySelector('[data-slot="collapsible-card-header"]')).not.toHaveClass("bg-foreground/5");
+  });
+
   it("renders ButtonGroup with horizontal orientation", () => {
     render(
       <ButtonGroup data-testid="btn-group">
